@@ -15,6 +15,11 @@ namespace ProjectsNetwork.Data
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<InterestedInProject>().HasKey(item => new { item.UserId, item.ProjectId });
+        }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Project> Projects { get; set; }
