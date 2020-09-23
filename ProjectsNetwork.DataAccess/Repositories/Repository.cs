@@ -24,13 +24,14 @@ namespace ProjectsNetwork.DataAccess.Repositories
 
         }
 
-        public T Get(int id)
+        public T Get(params object[] ids)
         {
-            return this._dbSet.Find(id);
+            return this._dbSet.Find(ids);
         }
 
-        public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = null)
         {
+
             IQueryable<T> query = this._dbSet;
 
             if (filter != null)
@@ -38,6 +39,19 @@ namespace ProjectsNetwork.DataAccess.Repositories
                 query = query.Where(filter);
             }
 
+            if (includeProperties != null)
+            {
+                foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+
+            }
+
+            if (orderBy != null)
+            {
+                return orderBy(query).ToList();
+            }
             return query.ToList();
         }
 
@@ -51,9 +65,9 @@ namespace ProjectsNetwork.DataAccess.Repositories
             this._dbSet.Remove(item);
         }
 
-        public void Remove(int id)
+        public void Remove(params object[] ids)
         {
-            T entity = this._dbSet.Find(id);
+            T entity = this._dbSet.Find(ids);
             this._dbSet.Remove(entity);
         }
     }

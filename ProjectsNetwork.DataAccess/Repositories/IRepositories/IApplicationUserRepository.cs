@@ -5,8 +5,8 @@ using System.Text;
 
 namespace ProjectsNetwork.DataAccess.Repositories.IRepositories
 {
-    public interface IProjectRepository: IRepository<Project>
+    public interface IApplicationUserRepository: IRepository<ApplicationUser>
     {
-        public void Update(Project project);
+        public void Update(ApplicationUser user);
     }
 }

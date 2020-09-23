@@ -23,6 +23,8 @@ namespace ProjectsNetwork.Data
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Project> Projects { get; set; }
+        public DbSet<InterestedInProject> InterestedInProjects { get; set; }
+        public DbSet<Skill> Skills { get; set; }
         
 
     }
