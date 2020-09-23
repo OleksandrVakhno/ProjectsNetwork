@@ -5,8 +5,8 @@ using System.Text;
 
 namespace ProjectsNetwork.DataAccess.Repositories.IRepositories
 {
-    public interface IProjectRepository: IRepository<Project>
+    public interface IInterestedInProjectRepository: IRepository<InterestedInProject>
     {
-        public void Update(Project project);
+        public void Update(InterestedInProject interestedInProject);
     }
 }

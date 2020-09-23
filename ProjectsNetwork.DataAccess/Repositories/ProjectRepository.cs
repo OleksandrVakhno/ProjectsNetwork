@@ -10,7 +10,7 @@ namespace ProjectsNetwork.DataAccess.Repositories
     public class ProjectRepository : Repository<Project>, IProjectRepository
     {
 
-        public readonly ApplicationDbContext _db;
+        private readonly ApplicationDbContext _db;
 
 
         public ProjectRepository(ApplicationDbContext db) : base(db)
@@ -27,7 +27,7 @@ namespace ProjectsNetwork.DataAccess.Repositories
 
             oldProject.Name = project.Name;
             oldProject.Description = project.Description;
-            oldProject.Skills = project.Skills;
+            oldProject.UserId = project.UserId;
         }
     }
 }

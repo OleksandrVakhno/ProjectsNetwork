@@ -6,8 +6,11 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ProjectsNetwork.Models
 {
-    public class ApplicationUser: IdentityUser
+    public class ApplicationUser : IdentityUser
     {
+        public List<Skill> Skills { get; set; }
+        public List<Project> Projects { get; set; }
+        public List<InterestedInProject> InterestedInProjects {get; set;}
 
     }
 }
