@@ -26,4 +26,7 @@
     <ProjectReference Include="..\ProjectsNetwork.DataAccess\ProjectsNetwork.DataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Posts\" />
+  </ItemGroup>
 </Project>
