@@ -70,5 +70,10 @@ namespace ProjectsNetwork.DataAccess.Repositories
             T entity = this._dbSet.Find(ids);
             this._dbSet.Remove(entity);
         }
+
+        public int Save()
+        {
+            return this._db.SaveChanges();
+        }
     }
 }

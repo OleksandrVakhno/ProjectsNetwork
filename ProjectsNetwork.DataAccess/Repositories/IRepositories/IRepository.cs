@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ProjectsNetwork.DataAccess.Repositories.IRepositories
 {
@@ -14,6 +15,8 @@ namespace ProjectsNetwork.DataAccess.Repositories.IRepositories
         void Insert(T item);
         void Remove(T item);
         void Remove(params object[] ids);
+        int Save();
+        Task<int> SaveAsync();
 
 
     }
