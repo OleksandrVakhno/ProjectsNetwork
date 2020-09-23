@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ProjectsNetwork.DataAccess.Repositories.IRepositories
 {
     public interface IRepository<T> where T: class
     {
 
-        T Get(int id);
-        IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null);
+        T Get(params object[] ids);
+        IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = null);
         void Insert(T item);
         void Remove(T item);
-        void Remove(int id);
+        void Remove(params object[] ids);
+        int Save();
+        Task<int> SaveAsync();
 
 
     }
