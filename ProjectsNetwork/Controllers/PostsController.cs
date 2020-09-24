@@ -14,6 +14,7 @@ namespace ProjectsNetwork.Controllers
     public class PostsController : Controller
     {
         private readonly IProjectRepository _projectRepository;
+
         public PostsController(IProjectRepository projectRepository)
         {
             this._projectRepository = projectRepository;
@@ -24,6 +25,11 @@ namespace ProjectsNetwork.Controllers
         {
             var projects = this._projectRepository.GetAll();
             return View(projects);
+        }
+
+        public IActionResult Post()
+        {
+            return View("PostForm");
         }
     }
 }

@@ -7,7 +7,12 @@
     <div class="container ">
         <div class="row" style="margin-top: 2%; margin-bottom: 2%">
             <div class="col-2 offset-md-10">
-                <button type="button" class="btn btn-dark">Post Project</button>
+                <script>
+                        function post() {
+                            window.location.href = '@Url.Action("Post", "Posts")';
+                        }
+                    </script>
+                <button type="button" class="btn btn-dark" onclick="post()">Post Project</button>
             </div>
         </div>
 
@@ -21,7 +26,8 @@
                     <p>@project.Description</p>
                 </div>
                 <div class="col">
-                    <button type="button" class="btn btn-light">Learn More</button>
+                    
+                    <button type="button" class="btn btn-light" >Learn More</button>
                 </div>
             </div>
         }

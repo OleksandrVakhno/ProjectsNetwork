@@ -1,5 +1,38 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model ProjectsNetwork.Models.Project
 @{
+    Layout = "_Layout";
+    ViewData["Title"] = "Post A Project";
 }
+
+    <form id="projectPost" action="Project">
+        <div class="form-group">
+            <label>Project Name</label>
+            <input type="text" class="form-control" asp-for="Name" placeholder="Enter name">
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea type="text" class="form-control" asp-for="Description" placeholder="Describe your project idea" rows="6"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Prefered Skills</label>
+            <textarea type="text" class="form-control" asp-for="PrefferedSkills" placeholder="Enter your prefered skills" rows="3"></textarea>
+            <small id="skills"class="form-text text-muted">Separate every skill with a comma and space</small>
+        
+        </div>
+
+        <script>document.getElementById('projectPost').onsubmit = function () {
+
+
+                var input = document.getElementById('skills').value;
+                var values = input.split(',');
+
+                values.forEach(
+                    function (skills) {
+                        //add the skills to the list of prefered skills 
+                    }
+                );
+            }</script>
+
+        <button type="submit" class="btn btn-primary">Post Project</button>
+    </form>
