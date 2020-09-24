@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ProjectsNetwork.Data;
@@ -9,9 +10,10 @@ using ProjectsNetwork.Data;
 namespace ProjectsNetwork.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200924032713_AddedManyToManySkillTables")]
+    partial class AddedManyToManySkillTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -303,15 +305,20 @@ namespace ProjectsNetwork.DataAccess.Migrations
 
             modelBuilder.Entity("ProjectsNetwork.Models.UserSkill", b =>
                 {
-                    b.Property<string>("UserId")
+                    b.Property<string>("ApplicationUserId")
                         .HasColumnType("text");
 
                     b.Property<int>("SkillId")
                         .HasColumnType("integer");
 
-                    b.HasKey("UserId", "SkillId");
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("ApplicationUserId", "SkillId");
 
                     b.HasIndex("SkillId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserSkill");
                 });
@@ -421,11 +428,9 @@ namespace ProjectsNetwork.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ProjectsNetwork.Models.ApplicationUser", "User")
+                    b.HasOne("ProjectsNetwork.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Skills")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }
