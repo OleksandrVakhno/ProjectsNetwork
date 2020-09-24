@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ProjectsNetwork.DataAccess.Repositories
 {
@@ -74,6 +75,11 @@ namespace ProjectsNetwork.DataAccess.Repositories
         public int Save()
         {
             return this._db.SaveChanges();
+        }
+
+        public Task<int> SaveAsync()
+        {
+            return this._db.SaveChangesAsync();
         }
     }
 }
