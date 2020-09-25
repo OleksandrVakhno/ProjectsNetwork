@@ -4,7 +4,7 @@
     ViewData["Title"] = "Post A Project";
 }
 
-    <form id="projectPost" action="Project">
+    <form id="projectPost" asp-action="Post">
         <div class="form-group">
             <label>Project Name</label>
             <input type="text" class="form-control" asp-for="Name" placeholder="Enter name">
@@ -29,7 +29,8 @@
 
                 values.forEach(
                     function (skills) {
-                        //add the skills to the list of prefered skills 
+                        console.log(skills);
+                            //add the skills to the list of prefered skills 
                     }
                 );
             }</script>
