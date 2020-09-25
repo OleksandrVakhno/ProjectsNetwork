@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ProjectsNetwork.DataAccess.Data.EntityConfigurations;
 using ProjectsNetwork.Models;
 
 namespace ProjectsNetwork.Data
@@ -18,8 +19,10 @@ namespace ProjectsNetwork.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<InterestedInProject>().HasKey(item => new { item.UserId, item.ProjectId });
-        }
+            modelBuilder.ApplyConfiguration<InterestedInProject>(new InterestedInProjectConfiguration());
+            modelBuilder.ApplyConfiguration<UserSkill>(new UserSkillConfiguration());
+            modelBuilder.ApplyConfiguration<ProjectSkill>(new ProjectSkillConfiguration());
+         }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Project> Projects { get; set; }

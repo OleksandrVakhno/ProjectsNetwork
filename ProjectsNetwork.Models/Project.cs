@@ -28,7 +28,7 @@ namespace ProjectsNetwork.Models
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
 
-        public List<Skill> PrefferedSkills { get; set; }
+        public List<ProjectSkill> PrefferedSkills { get; set; }
         public List<InterestedInProject> UsersInterested { get; set; }
 
     }
