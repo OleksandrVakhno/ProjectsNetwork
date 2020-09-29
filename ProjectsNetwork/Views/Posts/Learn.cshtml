@@ -1,0 +1,36 @@
+﻿@model ProjectsNetwork.Models.Project;
+@{
+
+    Layout = "_Layout";
+    ViewData["Title"] = Model.Name;
+}
+    <script>
+        function post(c) {
+            window.location.href = '@Url.Action("Index", "Posts")';
+        }
+        
+    </script>
+    <div class="container ">
+        <div class="row" style="margin-top: 2%; margin-bottom: 2%">
+            <div class="col-2 offset-md-10">
+                
+                <button type="button" class="btn btn-dark" onclick="post()">REQUEST TO JOIN</button>
+            </div>
+        </div>
+
+
+        <h2>@Model.Name</h2>
+        <div class="row text-center container p-3 mb-2 bg-dark text-white rounded ">
+            
+            <div class="col">
+                <p>@Model.Description</p>
+            </div>
+        </div>
+     
+        
+        
+
+
+    </div>
+
+

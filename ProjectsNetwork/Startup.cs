@@ -32,6 +32,7 @@ namespace ProjectsNetwork
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
+            services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

@@ -4,14 +4,20 @@
     Layout = "_Layout";
     ViewData["Title"] = "Projects Posts";
 }
+    <script>
+        function post(c) {
+            window.location.href = '@Url.Action("Post", "Posts")';
+        }
+        function learn(id) {
+            var url = '@Url.Action("Learn","Posts")';
+            url = url.concat("/",id.toString());
+            window.location.hred = url;
+        }
+    </script>
     <div class="container ">
         <div class="row" style="margin-top: 2%; margin-bottom: 2%">
             <div class="col-2 offset-md-10">
-                <script>
-                        function post() {
-                            window.location.href = '@Url.Action("Post", "Posts")';
-                        }
-                    </script>
+                
                 <button type="button" class="btn btn-dark" onclick="post()">Post Project</button>
             </div>
         </div>
@@ -26,8 +32,11 @@
                     <p>@project.Description</p>
                 </div>
                 <div class="col">
+                    <script>
+                        
+                    </script>
                     
-                    <button type="button" class="btn btn-light" >Learn More</button>
+                    <button type="button" class="btn btn-light" onclick="learn(@project.Id)" >Learn More</button>
                 </div>
             </div>
         }

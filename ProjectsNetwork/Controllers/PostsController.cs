@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProjectsNetwork.Data;
 using ProjectsNetwork.DataAccess.Repositories.IRepositories;
@@ -18,7 +20,6 @@ namespace ProjectsNetwork.Controllers
         public PostsController(IProjectRepository projectRepository)
         {
             this._projectRepository = projectRepository;
-            
         }
         
         // GET: /<controller>/
@@ -37,11 +38,23 @@ namespace ProjectsNetwork.Controllers
         public IActionResult Post(Project project)
         {
             project.CreationDate = DateTime.Now;
-            project.UserId = "52388fa9-3b2f-45b4-a51d-edc0da7829dc"; ///How to get current user id???
-            //project.User =  //How to get the current user as well
-            return Json(project);
+            ClaimsPrincipal currentUser = this.User;
+            var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            project.UserId = currentUserID;
 
-            //this._projectRepository.Insert(project); is this how you insert a row(project)??? 
+            //return Json(project);
+
+            this._projectRepository.Insert(project);
+            this._projectRepository.Save();
+            var projects = this._projectRepository.GetAll();
+            return View("Index", projects);
         }
+
+        public IActionResult Learn(int id)
+        {
+            var project = this._projectRepository.Get(id);
+            return View("Learn",project);
+        }
+
     }
 }
