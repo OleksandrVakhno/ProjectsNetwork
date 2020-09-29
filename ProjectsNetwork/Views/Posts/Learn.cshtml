@@ -6,6 +6,7 @@
 }
     <script>
         function post(c) {
+            alert("I have not yet done this part, lol")
             window.location.href = '@Url.Action("Index", "Posts")';
         }
         
@@ -19,13 +20,28 @@
         </div>
 
 
-        <h2>@Model.Name</h2>
-        <div class="row text-center container p-3 mb-2 bg-dark text-white rounded ">
-            
-            <div class="col">
-                <p>@Model.Description</p>
+        <h1 class="text-center" style = "text-transform:uppercase;">@Model.Name</h1>
+        <div class="container p-3 mb-2 bg-dark text-white rounded ">
+            <h4>DESCRIPTION:</h4>
+            <div class="row">
+                <div class="col">
+                    <p>@Model.Description</p>
+                </div>
+            </div>
+            <h4>PREFERED SKILLS:</h4>
+            <div class="row">
+                <div class="col">
+                    <p>@Model.PrefferedSkills</p>
+                </div>
+            </div>
+            <h4>TOPICS:</h4>
+            <div class="row">
+                <div class="col">
+                    <p>AREAS OF INTEREST...Wher is this at??</p>
+                </div>
             </div>
         </div>
+        
      
         
         

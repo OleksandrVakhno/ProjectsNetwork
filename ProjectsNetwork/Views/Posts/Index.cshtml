@@ -5,13 +5,13 @@
     ViewData["Title"] = "Projects Posts";
 }
     <script>
-        function post(c) {
+        function post() {
+            
             window.location.href = '@Url.Action("Post", "Posts")';
         }
         function learn(id) {
-            var url = '@Url.Action("Learn","Posts")';
-            url = url.concat("/",id.toString());
-            window.location.hred = url;
+            window.location.href = '@Url.Action("Learn","Posts")' + "/?id=" + id.toString();
+            
         }
     </script>
     <div class="container ">
@@ -32,9 +32,6 @@
                     <p>@project.Description</p>
                 </div>
                 <div class="col">
-                    <script>
-                        
-                    </script>
                     
                     <button type="button" class="btn btn-light" onclick="learn(@project.Id)" >Learn More</button>
                 </div>
