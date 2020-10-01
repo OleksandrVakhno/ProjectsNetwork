@@ -7,11 +7,11 @@
     <form id="projectPost" asp-action="Post">
         <div class="form-group">
             <label>Project Name</label>
-            <input type="text" class="form-control" asp-for="Name" placeholder="Enter name">
+            <input type="text" class="form-control" asp-for="Name" placeholder="Enter name" required>
         </div>
         <div class="form-group">
             <label>Description</label>
-            <textarea type="text" class="form-control" asp-for="Description" placeholder="Describe your project idea" rows="6"></textarea>
+            <textarea type="text" class="form-control" asp-for="Description" placeholder="Describe your project idea" rows="6" required></textarea>
         </div>
 
         <div class="form-group">
