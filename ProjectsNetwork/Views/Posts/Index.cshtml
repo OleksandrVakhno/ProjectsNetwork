@@ -24,9 +24,9 @@
 
         @foreach(var project in Model)
         {
-            <div class="row text-center container p-3 mb-2 bg-dark text-white rounded ">
+            <div class="row text-center container p-3 mb-2 bg-dark text-white" style="border-radius:1rem !important">
                 <div class="col">
-                    <h4>@project.Name</h4>
+                    <h4 style="text-transform: capitalize;">@project.Name</h4>
                 </div>
                 <div class="col">
                     <p>@project.Description</p>
