@@ -1,42 +1,35 @@
-﻿@model ProjectsNetwork.Models.Project
+﻿@model Tuple<List<Skill>, Project>
 @{
     Layout = "_Layout";
     ViewData["Title"] = "Post A Project";
 }
 
-    <form id="projectPost" asp-action="Post" class="bg-dark text-white" style="border-radius:1rem !important; padding: 2rem !important;">
-        <div class="form-group">
-            <label>Project Name</label>
-            <input type="text" class="form-control" asp-for="Name" placeholder="Enter name" required>
-        </div>
-        <div class="form-group">
-            <label>Description</label>
-            <textarea type="text" class="form-control" asp-for="Description" placeholder="Describe your project idea" rows="6" required></textarea>
-        </div>
 
-        <div class="form-group">
-            <label>Prefered Skills</label>
-            <textarea type="text" class="form-control" asp-for="PrefferedSkills" placeholder="Enter your prefered skills" rows="3"></textarea>
-            <small id="skills"class="form-text text-muted">Separate every skill with a comma and space</small>
-        
-        </div>
+<form id="projectPost" asp-action="Post" class="bg-dark text-white" style="border-radius:1rem !important; padding: 2rem !important;">
+    <div class="form-group">
+        <label>Project Name</label>
+        <input type="text" class="form-control" asp-for="Item2.Name" placeholder="Enter name" required>
+    </div>
+    <div class="form-group">
+        <label>Description</label>
+        <textarea type="text" class="form-control" asp-for="Item2.Description" placeholder="Describe your project idea" rows="6" required></textarea>
+    </div>
 
-        <script>document.getElementById('projectPost').onsubmit = function () {
+    <div class="form-group text-dark">
+
+        <select class="js-example-responsive" name="skills"  multiple="multiple" style="width:100%;">
+            <option value="0">None</option>
+            @if (Model.Item1 != null)
+            {
+                foreach (var skill in Model.Item1)
+                {
+                    <option value="@skill.Id">@skill.SkillName</option>
+                }
+            }
+        </select>
+    </div>
 
 
-                var input = document.getElementById('skills').value;
-                var values = input.split(',');
 
-                values.forEach(
-                    function (skills) {
-                        console.log(skills);
-                            //add the skills to the list of prefered skills
-                        /* How do you do it do you create a new skill or get a current skill based on the name, then get its id to put it in the list of
-                         * preffered skills???? I have no clue how to do this
-                         * /
-                    }
-                );
-            }</script>
-
-        <button type="submit" class="btn btn-light">Post Project</button>
-    </form>
+    <button type="submit" class="btn btn-light">Post Project</button>
+</form>

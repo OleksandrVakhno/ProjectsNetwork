@@ -18,10 +18,12 @@ namespace ProjectsNetwork.Controllers
     public class PostsController : Controller
     {
         private readonly IProjectRepository _projectRepository;
+        private readonly ISkillRepository _skillRepository;
 
-        public PostsController(IProjectRepository projectRepository)
+        public PostsController(IProjectRepository projectRepository, ISkillRepository skillRepository)
         {
             this._projectRepository = projectRepository;
+            this._skillRepository = skillRepository;
         }
         
         // GET: /<controller>/
@@ -33,23 +35,53 @@ namespace ProjectsNetwork.Controllers
 
         public IActionResult Post()
         {
-            return View("PostForm");
+            var tupleModel = new Tuple<List<Skill>, Project >((List<Skill>)this._skillRepository.GetAll(), new Project());
+            return View("PostForm",tupleModel);
         }
 
         [HttpPost]
-        public IActionResult Post(Project project)
+        public IActionResult Post([Bind(Prefix = "Item2")] Project project, int[] skills)
         {
             project.CreationDate = DateTime.Now;
-            ClaimsPrincipal currentUser = this.User;
-            var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-            project.UserId = currentUserID;
+            try
+            {
+                ClaimsPrincipal currentUser = this.User;
+                var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+                project.UserId = currentUserID;
+            }catch(Exception e)
+            {
+                return View("../Shared/Error",e);
+            }
 
+            if (skills != null)
+            {
+                List<ProjectSkill> prefferedSkills = new List<ProjectSkill>();
+                foreach(int x in skills)
+                {
+                    var cur = new ProjectSkill();
+                    cur.ProjectId = project.Id;
+                    cur.SkillId = x;
+                    prefferedSkills.Add(cur);
+                }
+                project.PrefferedSkills = prefferedSkills;
+            }
+            
             //return Json(project);
 
-            this._projectRepository.Insert(project);
-            this._projectRepository.Save();
-            var projects = this._projectRepository.GetAll();
-            return View("Index", projects);
+            try
+            {
+                this._projectRepository.Insert(project);
+            }catch(Exception e)
+            {
+                return View("../Shared/Error",e);
+            }
+            if (this._projectRepository.Save() >= 1)
+            {
+                var projects = this._projectRepository.GetAll();
+                return View("Index", projects);
+            }
+            return View("../Shared/Error");
+
         }
 
         public IActionResult Learn(int id)

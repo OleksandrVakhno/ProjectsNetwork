@@ -33,6 +33,7 @@ namespace ProjectsNetwork
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
+            services.AddScoped<ISkillRepository, SkillRepository>();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
