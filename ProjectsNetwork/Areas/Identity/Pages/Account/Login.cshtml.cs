@@ -84,7 +84,7 @@ namespace ProjectsNetwork.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in.");
                     
-                    return LocalRedirect(Url.Action("Index", "Posts"));
+                    return LocalRedirect(Url.Action("Index", "Posts", new { area = "User" }));
                 }
                 if (result.RequiresTwoFactor)
                 {
