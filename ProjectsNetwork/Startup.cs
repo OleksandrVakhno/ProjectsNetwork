@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,21 @@ namespace ProjectsNetwork
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddAuthentication()
+                .AddMicrosoftAccount(microsoftOptions =>
+                 {
+                     microsoftOptions.ClientId = Configuration["Authentication:Microsoft:ClientId"];
+                     microsoftOptions.ClientSecret = Configuration["Authentication:Microsoft:ClientSecret"];
+                 })
+                  .AddGoogle(options =>
+                   {
+                       IConfigurationSection googleAuthNSection =
+                           Configuration.GetSection("Authentication:Google");
+
+                       options.ClientId = googleAuthNSection["ClientId"];
+                       options.ClientSecret = googleAuthNSection["ClientSecret"];
+                   });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,6 +78,7 @@ namespace ProjectsNetwork
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
         }
     }
 }
