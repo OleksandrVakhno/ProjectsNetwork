@@ -1,0 +1,35 @@
+﻿@model Tuple<List<Skill>, Project>
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Post A Project";
+}
+
+
+<form id="projectPost" asp-action="Post" class="bg-dark text-white" style="border-radius:1rem !important; padding: 2rem !important;">
+    <div class="form-group">
+        <label>Project Name</label>
+        <input type="text" class="form-control" asp-for="Item2.Name" placeholder="Enter name" required>
+    </div>
+    <div class="form-group">
+        <label>Description</label>
+        <textarea type="text" class="form-control" asp-for="Item2.Description" placeholder="Describe your project idea" rows="6" required></textarea>
+    </div>
+
+    <div class="form-group text-dark">
+
+        <select class="js-example-responsive" name="skills"  multiple="multiple" style="width:100%;">
+            <option value="0">None</option>
+            @if (Model.Item1 != null)
+            {
+                foreach (var skill in Model.Item1)
+                {
+                    <option value="@skill.Id">@skill.SkillName</option>
+                }
+            }
+        </select>
+    </div>
+
+
+
+    <button type="submit" class="btn btn-light">Post Project</button>
+</form>

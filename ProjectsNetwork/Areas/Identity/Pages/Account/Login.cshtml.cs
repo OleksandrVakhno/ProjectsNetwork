@@ -83,7 +83,8 @@ namespace ProjectsNetwork.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    
+                    return LocalRedirect(Url.Action("Index", "Posts"));
                 }
                 if (result.RequiresTwoFactor)
                 {

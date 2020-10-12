@@ -8,6 +8,8 @@ using Microsoft.Extensions.Hosting;
 using ProjectsNetwork.Data;
 using ProjectsNetwork.Models;
 using System;
+using ProjectsNetwork.DataAccess.Repositories;
+using ProjectsNetwork.DataAccess.Repositories.IRepositories;
 
 namespace ProjectsNetwork
 {
@@ -29,6 +31,9 @@ namespace ProjectsNetwork
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddScoped<IProjectRepository, ProjectRepository>();
+            services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
+            services.AddScoped<ISkillRepository, SkillRepository>();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

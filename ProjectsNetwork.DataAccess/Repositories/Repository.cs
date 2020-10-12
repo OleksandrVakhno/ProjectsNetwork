@@ -8,9 +8,10 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace ProjectsNetwork.DataAccess.Repositories
 {
-    public class Repository<T> : IRepository<T> where T:class
+    public class Repository<T> : IRepository<T> where T : class
     {
 
         private readonly ApplicationDbContext _db;
