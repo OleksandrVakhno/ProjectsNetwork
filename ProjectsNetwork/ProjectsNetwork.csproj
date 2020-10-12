@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -23,13 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ProjectNetwork.Services\ProjectsNetwork.Services.csproj" />
     <ProjectReference Include="..\ProjectsNetwork.DataAccess\ProjectsNetwork.DataAccess.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Areas\User\" />
-    <Folder Include="Areas\User\Controllers\" />
-    <Folder Include="Areas\User\Views\" />
-    <Folder Include="Views\Posts\" />
   </ItemGroup>
 </Project>
