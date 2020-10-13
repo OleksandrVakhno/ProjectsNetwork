@@ -9,6 +9,8 @@
     <div class="form-group">
         <label>Project Name</label>
         <input type="text" class="form-control" asp-for="Item2.Name" placeholder="Enter name" required>
+        <input type="hidden" value="@Model.Item2.UserId" asp-for="Item2.UserId" />
+        <input type="hidden" value="@Model.Item2.CreationDate" asp-for="Item2.CreationDate" />
     </div>
     <div class="form-group">
         <label>Description</label>

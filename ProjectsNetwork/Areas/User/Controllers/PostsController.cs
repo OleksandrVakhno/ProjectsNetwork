@@ -39,7 +39,16 @@ namespace ProjectsNetwork.Controllers
 
         public IActionResult Post()
         {
-            var tupleModel = new Tuple<List<Skill>, Project >((List<Skill>)this._skillsService.GetAll(), new Project());
+            Project current = new Project();
+            ClaimsPrincipal currentUser = this.User;
+            var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (currentUserID == null)
+            {
+                return NotFound("User not found");
+            }
+            current.UserId = currentUserID;
+            current.CreationDate = DateTime.Now;
+            var tupleModel = new Tuple<List<Skill>, Project >((List<Skill>)this._skillsService.GetAll(), current);
             return View(tupleModel);
         }
 
@@ -51,14 +60,8 @@ namespace ProjectsNetwork.Controllers
             {
                 return BadRequest("The submitted input is not valid");
             }
-            ClaimsPrincipal currentUser = this.User;
-            var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-            if (currentUserID == null)
-            {
-                return NotFound("User not found");
-            }
-
-            var projectCreated = this._projectsService.PostProject(currentUserID, project, skills);
+            
+            var projectCreated = this._projectsService.PostProject(project, skills);
 
             if (!projectCreated)
             {
