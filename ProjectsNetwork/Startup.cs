@@ -37,9 +37,11 @@ namespace ProjectsNetwork
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();
+            services.AddScoped<IUserSkillRepository, UserSkillRepository>();
 
             services.AddScoped<IProjectsService, ProjectsService>();
             services.AddScoped<ISkillsService, SkillsService>();
+
 
             services.AddControllersWithViews();
             services.AddRazorPages();

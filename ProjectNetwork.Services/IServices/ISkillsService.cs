@@ -8,5 +8,8 @@ namespace ProjectsNetwork.Services.IServices
     public interface ISkillsService
     {
         IEnumerable<Skill> GetAll();
+        bool PostSkills(string UserId, int[] skills);
     }
+
+    
 }
