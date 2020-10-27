@@ -37,6 +37,8 @@ namespace ProjectsNetwork
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();
+            services.AddScoped<IInterestedInProjectRepository, InterestedInProjectRepository>();
+            services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
 
             services.AddScoped<IProjectsService, ProjectsService>();
             services.AddScoped<ISkillsService, SkillsService>();

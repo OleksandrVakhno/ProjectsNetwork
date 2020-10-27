@@ -11,10 +11,12 @@ namespace ProjectsNetwork.Services
     public class ProjectsService : IProjectsService
     {
         private readonly IProjectRepository _projectRepository;
+        private readonly IInterestedInProjectRepository _interestedInProjectRepository;
 
-        public ProjectsService(IProjectRepository projectRepository) {
+        public ProjectsService(IProjectRepository projectRepository, IInterestedInProjectRepository interestedInProjectRepository, IApplicationUserRepository applicationUserRepository) {
 
             this._projectRepository = projectRepository;
+            this._interestedInProjectRepository = interestedInProjectRepository;
 
         }
 
@@ -64,6 +66,38 @@ namespace ProjectsNetwork.Services
                 throw new Exception("Failed to create a new project: " + e.Message);
             }
            
+        }
+
+
+        public bool SubmitInterest(string userId, int projectId)
+        {
+            try
+            {
+                
+                var interestedInProject = new InterestedInProject
+                {
+                    ProjectId = projectId,
+                    UserId = userId,
+                    Confirmed = false
+                };
+
+                var inserted = this._interestedInProjectRepository.Insert(interestedInProject);
+                if ( inserted == null)
+                {
+                    return false;
+                }
+
+                if (this._interestedInProjectRepository.Save() == 0)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch(Exception e)
+            {
+                throw new Exception("Failed to submit the interest: " + e.Message);
+            }
         }
     }
 }

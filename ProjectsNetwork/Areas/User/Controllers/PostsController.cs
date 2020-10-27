@@ -83,5 +83,29 @@ namespace ProjectsNetwork.Controllers
             return View(project);
         }
 
+
+        public IActionResult SubmitInterest(int projectId)
+        {
+            if (projectId == null)
+            {
+                return BadRequest("ProjectId is missing");
+            }
+
+            ClaimsPrincipal currentUser = this.User;
+            var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (currentUserID == null)
+            {
+                return NotFound("User not found");
+            }
+
+            if (!this._projectsService.SubmitInterest(currentUserID, projectId))
+            {
+                return BadRequest();
+            }
+
+
+            return Ok();
+        }
+
     }
 }

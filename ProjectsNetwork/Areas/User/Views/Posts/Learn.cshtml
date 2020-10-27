@@ -5,9 +5,8 @@
     ViewData["Title"] = Model.Name;
 }
     <script>
-        function post(c) {
-            alert("I have not yet done this part, lol")
-            window.location.href = '@Url.Action("Index", "Posts")';
+        function post(projectId) {
+            window.location.href = '@Url.Action("SubmitInterest", "Posts")' + "/?projectId=" + projectId.toString();
         }
         
     </script>
@@ -15,7 +14,7 @@
         <div class="row" style="margin-top: 2%; margin-bottom: 2%">
             <div class="col-2 offset-md-10">
                 
-                <button type="button" class="btn btn-dark" onclick="post()">REQUEST TO JOIN</button>
+                <button type="button" class="btn btn-dark" onclick="post(@Model.Id)">REQUEST TO JOIN</button>
             </div>
         </div>
 
