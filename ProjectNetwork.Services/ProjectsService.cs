@@ -28,17 +28,12 @@ namespace ProjectsNetwork.Services
             return this._projectRepository.Get(Id);
         }
 
-        public bool PostProject(string UserId, Project project, int[] skills)
+        public bool PostProject(Project project, int[] skills)
         {
 
             try
             {
-                project.CreationDate = DateTime.Now;
-
-
-                project.UserId = UserId;
-
-
+                
                 if (skills != null)
                 {
                     List<ProjectSkill> prefferedSkills = new List<ProjectSkill>();
