@@ -14,6 +14,8 @@
         <label>Description</label>
         <textarea type="text" class="form-control" asp-for="Item2.Description" placeholder="Describe your project idea" rows="6" required></textarea>
     </div>
+    <input type="hidden" asp-for="Item2.UserId" value="@Model.Item2.UserId"/>
+    <input type="hidden" asp-for="Item2.CreationDate" value="@DateTime.Now" />
 
     <div class="form-group text-dark">
 
