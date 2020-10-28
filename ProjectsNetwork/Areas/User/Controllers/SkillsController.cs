@@ -55,12 +55,18 @@ namespace ProjectsNetwork.Controllers
 
             if (!addUserSkills)
             {
-                throw new Exception("Could not create the project.");
+                throw new Exception("Could not add skills.");
             }
 
             
             return RedirectToAction(nameof(Index));
 
         }
+        /*public IActionResult AddNew(string skill)
+        {
+            return Json("hello");
+        }*/
     }
+
+    
 }
