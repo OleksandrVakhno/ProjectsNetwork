@@ -12,6 +12,8 @@ using ProjectsNetwork.DataAccess.Repositories;
 using ProjectsNetwork.DataAccess.Repositories.IRepositories;
 using ProjectsNetwork.Services.IServices;
 using ProjectsNetwork.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using ProjectsNetwork.Utils;
 
 namespace ProjectsNetwork
 {
@@ -31,12 +33,15 @@ namespace ProjectsNetwork
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddDefaultTokenProviders()
+            services.AddIdentity<ApplicationUser, IdentityRole>(/*options => options.SignIn.RequireConfirmedAccount = true*/).AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();
+            services.AddScoped<IInterestedInProjectRepository, InterestedInProjectRepository>();
+            services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
+            services.AddSingleton<IEmailSender, EmailSender>();
 
             services.AddScoped<IProjectsService, ProjectsService>();
             services.AddScoped<ISkillsService, SkillsService>();
