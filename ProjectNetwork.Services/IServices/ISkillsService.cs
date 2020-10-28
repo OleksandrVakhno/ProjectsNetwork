@@ -9,6 +9,8 @@ namespace ProjectsNetwork.Services.IServices
     {
         IEnumerable<Skill> GetAll();
         bool PostSkills(string UserId, int[] skills);
+        public List<Skill> GetMySkills(String userId);
+        public Skill GetASkill(int id);
     }
 
     

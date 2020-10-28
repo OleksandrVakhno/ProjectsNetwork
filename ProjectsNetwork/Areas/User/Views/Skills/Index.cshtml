@@ -1,4 +1,4 @@
-﻿@model List<ProjectsNetwork.Models.Skill>;
+﻿@model Tuple<List<Skill>, List<Skill>>
 @{
     Layout = "_Layout";
     ViewData["Title"] = "Skills";
@@ -16,17 +16,30 @@
 
 
 <h4>My Skills</h4>
-<div class="text-white bg-dark" style="border-radius:1rem !important; padding: 2rem !important;"></div>
+<div class="text-white bg-dark" style="border-radius:1rem !important; padding: 2rem !important;">
+    @if (Model.Item2 != null)
+    {
+        <ul>
+            @foreach(var skill in Model.Item2){
+                <li>@skill.SkillName</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <h3>You don't have any skills added</h3>
+    }
+</div>
 <h3>Add New Skills</h3>
 <form id="skillPost" asp-action="Post" class="bg-dark text-white" style="border-radius:1rem !important; padding: 2rem !important;">
 
     <div class="form-group text-dark">
-        <h2>Choose Your Skills</h2>
+        <h2 class="text-white">Choose Your Skills</h2>
         <select class="js-example-responsive" name="skills" multiple="multiple" style="width:100%;">
             <option value="0">None</option>
-            @if (Model != null)
+            @if (Model.Item1 != null)
             {
-                foreach (var skill in Model)
+                foreach (var skill in Model.Item1)
                 {
                     <option value="@skill.Id">@skill.SkillName</option>
                 }
@@ -46,6 +59,6 @@
 
 
 
-    <button type="submit" class="btn btn-light">Post Project</button>
+    <button type="submit" class="btn btn-light">Add Skills</button>
 </form>
 

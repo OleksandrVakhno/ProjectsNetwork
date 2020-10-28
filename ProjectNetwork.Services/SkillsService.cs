@@ -22,11 +22,21 @@ namespace ProjectsNetwork.Services
         {
             return this._skillRepository.GetAll();
         }
-
-        /*public IEnumerable<UserSkill> GetMySkills(int id)
+        public Skill GetASkill(int id)
         {
-            return this._userSkillRepository.Get(id);
-        }*/
+            return this._skillRepository.Get(id);
+        }
+
+        public List<Skill> GetMySkills(String userId)
+        {
+            var tempSkils = this._userSkillRepository.GetAll(skills => skills.UserId == userId);
+            List<Skill> mySkills = new List<Skill>();
+            foreach (var userSkill in tempSkils)
+            {
+                mySkills.Add(GetASkill(userSkill.SkillId));
+            }
+            return mySkills;
+        }
 
         public bool PostSkills(string UserId, int[] skills)
         {

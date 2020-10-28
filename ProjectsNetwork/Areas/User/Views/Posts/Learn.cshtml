@@ -1,8 +1,8 @@
-﻿@model ProjectsNetwork.Models.Project;
+﻿@model Tuple<Project, List<Skill>>
 @{
 
     Layout = "_Layout";
-    ViewData["Title"] = Model.Name;
+    ViewData["Title"] = Model.Item1.Name;
 }
     <script>
         function post(c) {
@@ -20,18 +20,30 @@
         </div>
 
 
-        <h1 class="text-center" style="text-transform:uppercase; font-family: Impact, Charcoal, sans-serif">@Model.Name</h1>
+        <h1 class="text-center" style="text-transform:uppercase; font-family: Impact, Charcoal, sans-serif">@Model.Item1.Name</h1>
         <div class="container p-3 mb-2 bg-dark text-white" style="border-radius:1rem !important">
             <h4>DESCRIPTION:</h4>
             <div class="row">
                 <div class="col">
-                    <p>@Model.Description</p>
+                    <p>@Model.Item1.Description</p>
                 </div>
             </div>
             <h4>PREFERED SKILLS:</h4>
             <div class="row">
                 <div class="col">
-                    <p>@Model.PrefferedSkills</p>
+                    @if (Model.Item2 != null)
+                    {
+                        <ul>
+                            @foreach (var skill in Model.Item2)
+                            {
+                                <li>@skill.SkillName</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <h3>No preffered skills for this project</h3>
+                    }
                 </div>
             </div>
             <h4>TOPICS:</h4>

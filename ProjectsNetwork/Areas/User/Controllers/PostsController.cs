@@ -73,7 +73,9 @@ namespace ProjectsNetwork.Controllers
         public IActionResult Learn(int id)
         {
             var project = this._projectsService.GetProject(id);
-            return View(project);
+            var skills = this._projectsService.GetMySkills(id);
+            var tupleModel = new Tuple<Project, List<Skill>>(project, skills);
+            return View(tupleModel);
         }
 
     }

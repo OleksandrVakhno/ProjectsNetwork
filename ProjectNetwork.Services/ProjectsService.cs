@@ -11,10 +11,14 @@ namespace ProjectsNetwork.Services
     public class ProjectsService : IProjectsService
     {
         private readonly IProjectRepository _projectRepository;
+        private readonly IProjectSkillRepository _projectSkillRepository;
+        private readonly ISkillRepository _skillRepository;
 
-        public ProjectsService(IProjectRepository projectRepository) {
+        public ProjectsService(IProjectRepository projectRepository, IProjectSkillRepository projectSkillRepository, ISkillRepository skillRepository) {
 
             this._projectRepository = projectRepository;
+            this._projectSkillRepository = projectSkillRepository;
+            this._skillRepository = skillRepository;
 
         }
 
@@ -27,6 +31,18 @@ namespace ProjectsNetwork.Services
         {
             return this._projectRepository.Get(Id);
         }
+
+        public List<Skill> GetMySkills(int projectId)
+        {
+            var tempProject = this._projectSkillRepository.GetAll(proj => proj.ProjectId == projectId);
+            List<Skill> mySkills = new List<Skill>();
+            foreach (var projectSkill in tempProject)
+            {
+                mySkills.Add(this._skillRepository.Get(projectSkill.SkillId));
+            }
+            return mySkills;
+        }
+
 
         public bool PostProject(string UserId, Project project, int[] skills)
         {
