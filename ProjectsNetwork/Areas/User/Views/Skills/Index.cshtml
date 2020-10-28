@@ -1,16 +1,27 @@
 ﻿@model List<ProjectsNetwork.Models.Skill>;
 @{
+    Layout = "_Layout";
     ViewData["Title"] = "Skills";
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("div.other").hide();
+            $('input[type="radio"]').click(function () {
+                $("#other").show();
+            });
+        });
+    </script>
 }
 
 
 <h4>My Skills</h4>
-
+<div class="text-white bg-dark" style="border-radius:1rem !important; padding: 2rem !important;"></div>
 <h3>Add New Skills</h3>
 <form id="skillPost" asp-action="Post" class="bg-dark text-white" style="border-radius:1rem !important; padding: 2rem !important;">
-    
-    <div class="form-group text-dark">
 
+    <div class="form-group text-dark">
+        <h2>Choose Your Skills</h2>
         <select class="js-example-responsive" name="skills" multiple="multiple" style="width:100%;">
             <option value="0">None</option>
             @if (Model != null)
@@ -22,6 +33,16 @@
             }
         </select>
     </div>
+    <div class="form-group text-dark">
+        <label class="text-white">
+            <input type="radio" name="colorRadio"
+                   value="other"> Other
+        </label>
+        <div class="other text-white" id="other">
+            <h2>Add new skills</h2>
+        </div>
+    </div>
+
 
 
 
