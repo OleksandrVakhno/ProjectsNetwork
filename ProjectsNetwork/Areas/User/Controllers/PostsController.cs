@@ -37,6 +37,14 @@ namespace ProjectsNetwork.Controllers
             return View(projects);
         }
 
+        public IActionResult MyProjects()
+        {
+            ClaimsPrincipal currentUser = this.User;
+            var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var projects = this._projectsService.GetUserProjects(currentUserID);
+            return View(projects);
+        }
+
         public IActionResult Post()
         {
             ClaimsPrincipal currentUser = this.User;
@@ -79,17 +87,18 @@ namespace ProjectsNetwork.Controllers
 
         public IActionResult Learn(int id)
         {
+            ClaimsPrincipal currentUser = this.User;
+            var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
             var project = this._projectsService.GetProject(id);
-            return View(project);
+            var interest = project.UsersInterested.Find(interseted => interseted.UserId == currentUserID);
+            var interested = interest != null;
+            var tupleModel = new Tuple<Project, bool>(project, interested);
+            return View(tupleModel);
         }
 
 
         public IActionResult SubmitInterest(int projectId)
         {
-            if (projectId == null)
-            {
-                return BadRequest("ProjectId is missing");
-            }
 
             ClaimsPrincipal currentUser = this.User;
             var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -103,8 +112,7 @@ namespace ProjectsNetwork.Controllers
                 return BadRequest();
             }
 
-
-            return Ok();
+            return RedirectToAction("Learn", new { id = projectId });
         }
 
     }

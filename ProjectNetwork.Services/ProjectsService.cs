@@ -3,6 +3,7 @@ using ProjectsNetwork.Models;
 using ProjectsNetwork.Services.IServices;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
@@ -12,11 +13,13 @@ namespace ProjectsNetwork.Services
     {
         private readonly IProjectRepository _projectRepository;
         private readonly IInterestedInProjectRepository _interestedInProjectRepository;
+        private readonly IApplicationUserRepository _applicationUserRepository;
 
         public ProjectsService(IProjectRepository projectRepository, IInterestedInProjectRepository interestedInProjectRepository, IApplicationUserRepository applicationUserRepository) {
 
             this._projectRepository = projectRepository;
             this._interestedInProjectRepository = interestedInProjectRepository;
+            this._applicationUserRepository = applicationUserRepository;
 
         }
 
@@ -27,7 +30,18 @@ namespace ProjectsNetwork.Services
 
         public Project GetProject(int Id)
         {
-            return this._projectRepository.Get(Id);
+            var project = this._projectRepository.Get(Id);
+            if (project!=null)
+            {
+                project.UsersInterested = this._interestedInProjectRepository.GetAll(interestedIn => interestedIn.ProjectId == Id).ToList();
+            }
+
+            return project;
+        }
+
+        public IEnumerable<Project> GetUserProjects(string userId)
+        {
+            return this._projectRepository.GetAll(proj => proj.UserId == userId);
         }
 
         public bool PostProject(Project project, int[] skills)
@@ -73,6 +87,15 @@ namespace ProjectsNetwork.Services
         {
             try
             {
+                var project = this._projectRepository.Get(projectId);
+                var interestedIn = this._interestedInProjectRepository.Get(userId, projectId);
+                //user should not be interested in own project
+                if (project.UserId == userId || interestedIn!=null)
+                {
+                    return false;
+                }
+
+                
                 
                 var interestedInProject = new InterestedInProject
                 {
