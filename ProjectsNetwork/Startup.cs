@@ -36,13 +36,13 @@ namespace ProjectsNetwork
             services.AddAuthentication()
                 .AddMicrosoftAccount(microsoftOptions =>
                  {
-                     microsoftOptions.ClientId = Configuration["Authentication:Microsoft:ClientId"];
-                     microsoftOptions.ClientSecret = Configuration["Authentication:Microsoft:ClientSecret"];
+                     microsoftOptions.ClientId = Configuration["AppSecrets:Authentication:Microsoft:ClientId"];
+                     microsoftOptions.ClientSecret = Configuration["AppSecrets:Authentication:Microsoft:ClientSecret"];
                  })
                   .AddGoogle(options =>
                    {
                        IConfigurationSection googleAuthNSection =
-                           Configuration.GetSection("Authentication:Google");
+                           Configuration.GetSection("AppSecrets:Authentication:Google");
 
                        options.ClientId = googleAuthNSection["ClientId"];
                        options.ClientSecret = googleAuthNSection["ClientSecret"];
