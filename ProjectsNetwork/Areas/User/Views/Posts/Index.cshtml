@@ -4,24 +4,16 @@
     Layout = "_Layout";
     ViewData["Title"] = "Projects Posts";
 }
-    <script>
-        function post() {
-            
-            window.location.href = '@Url.Action("Post", "Posts")';
-        }
+
+<script>
         function learn(id) {
             window.location.href = '@Url.Action("Learn","Posts")' + "/?id=" + id.toString();
-            
-        }
-    </script>
-    <div class="container ">
-        <div class="row" style="margin-top: 2%; margin-bottom: 2%">
-            <div class="col-2 offset-md-10">
-                
-                <button type="button" class="btn btn-dark" onclick="post()">Post Project</button>
-            </div>
-        </div>
 
+        }
+</script>
+    
+    <div class="container ">
+        
         @foreach(var project in Model)
         {
             <div class="row text-center container p-3 mb-2 bg-dark text-white" style="border-radius:1rem !important">

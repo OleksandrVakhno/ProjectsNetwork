@@ -1,35 +1,49 @@
-﻿@model Tuple<List<Skill>, Project>
+﻿@model Tuple<List<Skill>, Project, Skill>
 @{
     Layout = "_Layout";
     ViewData["Title"] = "Post A Project";
 }
+@section scripts{
+    <script>$(document).ready(function () {
+            $("div.other").hide();
+            $('input[type="radio"]').click(function () {
+                $("#other").show();
+            });
 
 
-<form id="projectPost" asp-action="Post" class="bg-dark text-white" style="border-radius:1rem !important; padding: 2rem !important;">
-    <div class="form-group">
-        <label>Project Name</label>
-        <input type="text" class="form-control" asp-for="Item2.Name" placeholder="Enter name" required>
-    </div>
-    <div class="form-group">
-        <label>Description</label>
-        <textarea type="text" class="form-control" asp-for="Item2.Description" placeholder="Describe your project idea" rows="6" required></textarea>
-    </div>
+        });</script>
+}
+<div class="bg-dark text-white" style="border-radius:1rem !important; padding: 2rem !important;">
+    <small>Warning: The filled form will be reset if new skills are added to our list, please check our list and skills before filling the res</small>
+    <form id="projectPost" method="post" action="/User/Posts/Post">
+        <div class="form-group">
+            <label>Project Name</label>
+            <input type="text" class="form-control" asp-for="Item2.Name" placeholder="Enter name" required>
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea type="text" class="form-control" asp-for="Item2.Description" placeholder="Describe your project idea" rows="6" required></textarea>
+        </div>
+        <input type="hidden" asp-for="Item2.UserId" value="@Model.Item2.UserId" />
+        <input type="hidden" asp-for="Item2.CreationDate" value="@DateTime.Now" />
 
-    <div class="form-group text-dark">
+        <div class="form-group text-dark">
 
-        <select class="js-example-responsive" name="skills"  multiple="multiple" style="width:100%;">
-            <option value="0">None</option>
-            @if (Model.Item1 != null)
-            {
-                foreach (var skill in Model.Item1)
+            <select class="js-example-responsive" name="skills" multiple="multiple" style="width:100%;">
+                <option value="0">None</option>
+                @if (Model.Item1 != null)
                 {
-                    <option value="@skill.Id">@skill.SkillName</option>
+                    foreach (var skill in Model.Item1)
+                    {
+                        <option value="@skill.Id">@skill.SkillName</option>
+                    }
                 }
-            }
-        </select>
-    </div>
+            </select>
+        </div>
 
 
 
-    <button type="submit" class="btn btn-light">Post Project</button>
-</form>
+        <button type="submit" class="btn btn-light">Post Project</button>
+    </form>
+    @await Html.PartialAsync("_newSkill", Model.Item3)
+</div>

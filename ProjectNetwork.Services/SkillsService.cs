@@ -38,6 +38,7 @@ namespace ProjectsNetwork.Services
             return mySkills;
         }
 
+        
         public bool PostSkills(string UserId, int[] skills)
         {
 
@@ -83,6 +84,25 @@ namespace ProjectsNetwork.Services
                 throw new Exception("Failed to create a new project: " + e.Message);
             }
 
+        }
+
+        public bool AddSkill(Skill skill)
+        {
+            if (skill != null)
+            {
+                if (this._skillRepository.Insert(skill) == null)
+                {
+                    return false;
+                }
+
+                if (this._skillRepository.Save() == 0)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            return false;
         }
     }
 }

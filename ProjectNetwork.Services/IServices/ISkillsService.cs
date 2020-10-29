@@ -11,6 +11,7 @@ namespace ProjectsNetwork.Services.IServices
         bool PostSkills(string UserId, int[] skills);
         public List<Skill> GetMySkills(String userId);
         public Skill GetASkill(int id);
+        public bool AddSkill(Skill skill);
     }
 
     

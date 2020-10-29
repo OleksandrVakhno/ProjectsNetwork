@@ -1,40 +1,62 @@
-﻿@model Tuple<Project, List<Skill>>
+
+﻿<!--
+     <<<<<<< HEAD
+ model Tuple<Project, List<Skill>>
+model Tuple<Project, bool>
+>>>>>>> origin/master
+=======
+-->
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> userManager
+@model Learn
 @{
 
     Layout = "_Layout";
-    ViewData["Title"] = Model.Item1.Name;
+    ViewData["Title"] = Model.Project.Name;
 }
-    <script>
-        function post(c) {
-            alert("I have not yet done this part, lol")
-            window.location.href = '@Url.Action("Index", "Posts")';
+<script>
+        function post(projectId) {
+            window.location.href = '@Url.Action("SubmitInterest", "Posts")' + "/?projectId=" + projectId.toString();
         }
-        
-    </script>
-    <div class="container ">
+
+</script>
+<div class="container">
+    @if (Model.Project.UserId != userManager.GetUserId(User))
+    {
         <div class="row" style="margin-top: 2%; margin-bottom: 2%">
             <div class="col-2 offset-md-10">
-                
-                <button type="button" class="btn btn-dark" onclick="post()">REQUEST TO JOIN</button>
+                @if (Model.Request)
+                {
+                    <i class="icon-ok-sign" style="color:green">Interest Submitted</i>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-dark" onclick="post(@Model.Project.Id)">REQUEST TO JOIN</button>
+                }
+
+
+
             </div>
         </div>
+    }
 
 
-        <h1 class="text-center" style="text-transform:uppercase; font-family: Impact, Charcoal, sans-serif">@Model.Item1.Name</h1>
+<!--<<<<<<< HEAD-->
+        <h1 class="text-center" style="text-transform:uppercase; font-family: Impact, Charcoal, sans-serif">@Model.Project.Name</h1>
         <div class="container p-3 mb-2 bg-dark text-white" style="border-radius:1rem !important">
             <h4>DESCRIPTION:</h4>
             <div class="row">
                 <div class="col">
-                    <p>@Model.Item1.Description</p>
+                    <p>@Model.Project.Description</p>
                 </div>
             </div>
             <h4>PREFERED SKILLS:</h4>
             <div class="row">
                 <div class="col">
-                    @if (Model.Item2 != null)
+                    @if (Model.Skills != null)
                     {
                         <ul>
-                            @foreach (var skill in Model.Item2)
+                            @foreach (var skill in Model.Skills)
                             {
                                 <li>@skill.SkillName</li>
                             }
@@ -45,20 +67,32 @@
                         <h3>No preffered skills for this project</h3>
                     }
                 </div>
-            </div>
-            <h4>TOPICS:</h4>
-            <div class="row">
-                <div class="col">
-                    <p>AREAS OF INTEREST...Wher is this at??</p>
-                </div>
+<!--=======-
+
+
+    <h1 class="text-center" style="text-transform:uppercase; font-family: Impact, Charcoal, sans-serif">Model.Project.Name</h1>
+    <div class="container p-3 mb-2 bg-dark text-white" style="border-radius:1rem !important">
+        <h4>DESCRIPTION:</h4>
+        <div class="row">
+            <div class="col">
+                <p>Model.Project.Description</p>
             </div>
         </div>
+        <h4>PREFERED SKILLS:</h4>
+        <div class="row">
+            <div class="col">
+                <p>Model.Item1.PrefferedSkills</p>
+>>>>>>> origin/master-->
+            </div>
         
-     
-        
-        
-
-
+        <h4>TOPICS:</h4>
+        <div class="row">
+            <div class="col">
+                <p>AREAS OF INTEREST...Wher is this at??</p>
+            </div>
+        </div>
     </div>
+
+</div>
 
 

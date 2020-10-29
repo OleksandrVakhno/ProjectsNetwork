@@ -11,7 +11,7 @@ using ProjectsNetwork.Services.IServices;
 
 namespace ProjectsNetwork.Controllers
 {
-    
+
     [Route("User/Skills",
         Name = "skill")]
     [Area("User")]
@@ -36,14 +36,15 @@ namespace ProjectsNetwork.Controllers
                 return NotFound("User not found");
             }
             var mySkills = this._skillsService.GetMySkills(currentUserID);
-            var tupleModel = new Tuple<List<Skill>, List<Skill>>((List<Skill>)skills, mySkills);
+            var tupleModel = new Tuple<List<Skill>, List<Skill>, Skill>((List<Skill>)skills, mySkills, new Skill());
             return View(tupleModel);
         }
 
         [HttpPost]
+        [Route("Post")]
         public IActionResult Post(int[] skills)
         {
-            
+
             ClaimsPrincipal currentUser = this.User;
             var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
             if (currentUserID == null)
@@ -51,21 +52,31 @@ namespace ProjectsNetwork.Controllers
                 return NotFound("User not found");
             }
 
-            var addUserSkills = this._skillsService.PostSkills(currentUserID,skills);
+            var addUserSkills = this._skillsService.PostSkills(currentUserID, skills);
 
             if (!addUserSkills)
             {
                 throw new Exception("Could not add skills.");
             }
 
-            
+
             return RedirectToAction(nameof(Index));
 
         }
-        /*public IActionResult AddNew(string skill)
+
+        [HttpPost]
+        [Route("AddNew")]
+        public IActionResult AddNew(Skill skill)
         {
-            return Json("hello");
-        }*/
+            var addedSkill = this._skillsService.AddSkill(skill);
+
+            if (!addedSkill)
+            {
+                throw new Exception("Could not add skill.");
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 
     

@@ -16,6 +16,7 @@ using ProjectsNetwork.Services.IServices;
 namespace ProjectsNetwork.Controllers
 {
     [Authorize]
+    [Route("User/Posts")]
     [Area("User")]
     public class PostsController : Controller
     {
@@ -29,28 +30,27 @@ namespace ProjectsNetwork.Controllers
             this._projectsService = projectsService;
             this._skillsService = skillsService;
         }
-        
+
         // GET: /<controller>/
+        [Route("")]
         public IActionResult Index()
         {
             var projects = this._projectsService.GetAll();
             return View(projects);
         }
 
-        public IActionResult Post()
+        [Route("MyProjects")]
+        public IActionResult MyProjects()
         {
-            var tupleModel = new Tuple<List<Skill>, Project >((List<Skill>)this._skillsService.GetAll(), new Project());
-            return View(tupleModel);
+            ClaimsPrincipal currentUser = this.User;
+            var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var projects = this._projectsService.GetUserProjects(currentUserID);
+            return View(projects);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Post([Bind(Prefix = "Item2")] Project project, int[] skills)
+        [Route("Post")]
+        public IActionResult Post()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest("The submitted input is not valid");
-            }
             ClaimsPrincipal currentUser = this.User;
             var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
             if (currentUserID == null)
@@ -58,7 +58,27 @@ namespace ProjectsNetwork.Controllers
                 return NotFound("User not found");
             }
 
-            var projectCreated = this._projectsService.PostProject(currentUserID, project, skills);
+            var project = new Project();
+            project.UserId = currentUserID;
+           
+            var tupleModel = new Tuple<List<Skill>, Project, Skill>((List<Skill>)this._skillsService.GetAll(), project, new Skill());
+            return View(tupleModel);
+        }
+
+        [HttpPost]
+        [Route("Post")]
+        [ValidateAntiForgeryToken]
+        public IActionResult Post([Bind(Prefix = "Item2")] Project project, int[] skills)
+        {
+
+           
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("The submitted input is not valid");
+            }
+           
+
+            var projectCreated = this._projectsService.PostProject(project, skills);
 
             if (!projectCreated)
             {
@@ -70,12 +90,57 @@ namespace ProjectsNetwork.Controllers
 
         }
 
+        [HttpPost]
+        [Route("AddNew")]
+        public IActionResult AddNew(Skill skill)
+        {
+            var addedSkill = this._skillsService.AddSkill(skill);
+
+            if (!addedSkill)
+            {
+                throw new Exception("Could not add skill.");
+            }
+
+            return RedirectToAction(nameof(Post));
+        }
+
+        [Route("Learn")]
         public IActionResult Learn(int id)
         {
+            ClaimsPrincipal currentUser = this.User;
+            var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
             var project = this._projectsService.GetProject(id);
+//<<<<<<< HEAD
             var skills = this._projectsService.GetMySkills(id);
-            var tupleModel = new Tuple<Project, List<Skill>>(project, skills);
-            return View(tupleModel);
+            var interest = project.UsersInterested.Find(interseted => interseted.UserId == currentUserID);
+            var interested = interest != null;
+            var learnModel = new Learn(project, skills, interested);
+            //var tupleModel = new Tuple<Project, List<Skill>>(project, skills);
+            return View(learnModel);
+//=======
+            
+            //var tupleModel = new Tuple<Project, bool>(project, interested);
+            //return View(tupleModel);
+        }
+
+        [Route("SubmitInterest")]
+        public IActionResult SubmitInterest(int projectId)
+        {
+
+            ClaimsPrincipal currentUser = this.User;
+            var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (currentUserID == null)
+            {
+                return NotFound("User not found");
+            }
+
+            if (!this._projectsService.SubmitInterest(currentUserID, projectId))
+            {
+                return BadRequest();
+            }
+
+            return RedirectToAction("Learn", new { id = projectId });
+//>>>>>>> origin/master
         }
 
     }

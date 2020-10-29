@@ -8,8 +8,11 @@ namespace ProjectsNetwork.Services.IServices
     public interface IProjectsService
     {
         IEnumerable<Project> GetAll();
+        IEnumerable<Project> GetUserProjects(string userId);
         Project GetProject(int Id);
-        bool PostProject(string UserId, Project project, int[] skills);
         public List<Skill> GetMySkills(int projectId);
+        bool PostProject(Project project, int[] skills);
+        bool SubmitInterest(string userId, int projectId);
+
     }
 }
