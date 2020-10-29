@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using ProjectsNetwork.Data;
 using ProjectsNetwork.DataAccess.Repositories.IRepositories;
 using System;
@@ -8,9 +9,10 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace ProjectsNetwork.DataAccess.Repositories
 {
-    public class Repository<T> : IRepository<T> where T:class
+    public class Repository<T> : IRepository<T> where T : class
     {
 
         private readonly ApplicationDbContext _db;
@@ -56,20 +58,20 @@ namespace ProjectsNetwork.DataAccess.Repositories
             return query.ToList();
         }
 
-        public void Insert(T item)
+        public EntityEntry<T> Insert(T item)
         {
-            this._dbSet.Add(item);
+            return this._dbSet.Add(item);
         }
 
-        public void Remove(T item)
+        public EntityEntry<T> Remove(T item)
         {
-            this._dbSet.Remove(item);
+            return this._dbSet.Remove(item);
         }
 
-        public void Remove(params object[] ids)
+        public EntityEntry<T> Remove(params object[] ids)
         {
             T entity = this._dbSet.Find(ids);
-            this._dbSet.Remove(entity);
+            return this._dbSet.Remove(entity);
         }
 
         public int Save()

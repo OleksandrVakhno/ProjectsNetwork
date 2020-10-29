@@ -4144,6 +4144,7 @@ input[type="button"].btn-block {
   display: block;
 }
 
+
 .navbar {
   position: relative;
   display: -ms-flexbox;
@@ -6690,8 +6691,8 @@ button.bg-dark:focus {
 }
 
 .rounded-bottom {
-  border-bottom-right-radius: 0.25rem !important;
-  border-bottom-left-radius: 0.25rem !important;
+  border-bottom-right-radius: .90rem !important;
+  border-bottom-left-radius: .90rem !important;
 }
 
 .rounded-left {

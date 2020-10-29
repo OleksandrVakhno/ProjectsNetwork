@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -12,9 +13,9 @@ namespace ProjectsNetwork.DataAccess.Repositories.IRepositories
 
         T Get(params object[] ids);
         IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = null);
-        void Insert(T item);
-        void Remove(T item);
-        void Remove(params object[] ids);
+        EntityEntry<T> Insert(T item);
+        EntityEntry<T> Remove(T item);
+        EntityEntry<T> Remove(params object[] ids);
         int Save();
         Task<int> SaveAsync();
 
