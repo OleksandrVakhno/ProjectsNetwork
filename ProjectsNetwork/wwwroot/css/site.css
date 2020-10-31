@@ -70,3 +70,41 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+.dropdown {
+    float: left;
+    overflow: hidden;
+}
+
+.dropdown-content {
+    display: none;
+    left: 0;
+    background-color: #343a40;
+    width: 100%;
+    z-index: 1;
+}
+
+.dropdown-content a{
+    color: black;
+}
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+.dropdown-content a:hover {
+    background-color: #eee;
+    color: black;
+}
+
+.dropbtn {
+    font-size: 16px;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: inherit;
+    margin: 0;
+}
+
