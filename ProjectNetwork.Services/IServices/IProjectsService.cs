@@ -10,7 +10,6 @@ namespace ProjectsNetwork.Services.IServices
         IEnumerable<Project> GetAll();
         IEnumerable<Project> GetUserProjects(string userId);
         Project GetProject(int Id);
-        public List<Skill> GetMySkills(int projectId);
         bool PostProject(Project project, int[] skills);
         bool SubmitInterest(string userId, int projectId);
 

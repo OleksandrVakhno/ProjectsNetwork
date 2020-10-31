@@ -41,8 +41,8 @@ namespace ProjectsNetwork.Controllers
         }
 
         [HttpPost]
-        [Route("Post")]
-        public IActionResult Post(int[] skills)
+        [Route("PostUserSkills")]
+        public IActionResult PostUserSkills(int[] skills)
         {
 
             ClaimsPrincipal currentUser = this.User;
@@ -52,7 +52,7 @@ namespace ProjectsNetwork.Controllers
                 return NotFound("User not found");
             }
 
-            var addUserSkills = this._skillsService.PostSkills(currentUserID, skills);
+            var addUserSkills = this._skillsService.PostUserSkills(currentUserID, skills);
 
             if (!addUserSkills)
             {
@@ -65,9 +65,14 @@ namespace ProjectsNetwork.Controllers
         }
 
         [HttpPost]
-        [Route("AddNew")]
-        public IActionResult AddNew(Skill skill)
+        [Route("AddNewSkill")]
+        public IActionResult AddNewSkill(Skill skill)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("The submitted input is not valid");
+            }
+
             var addedSkill = this._skillsService.AddSkill(skill);
 
             if (!addedSkill)

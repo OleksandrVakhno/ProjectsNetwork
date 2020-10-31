@@ -12,28 +12,14 @@ namespace ProjectsNetwork.Services
     public class ProjectsService : IProjectsService
     {
         private readonly IProjectRepository _projectRepository;
-//<<<<<<< HEAD
-        private readonly IProjectSkillRepository _projectSkillRepository;
-        private readonly ISkillRepository _skillRepository;
         private readonly IInterestedInProjectRepository _interestedInProjectRepository;
         private readonly IApplicationUserRepository _applicationUserRepository;
-
-        public ProjectsService(IProjectRepository projectRepository, IProjectSkillRepository projectSkillRepository, ISkillRepository skillRepository, IInterestedInProjectRepository interestedInProjectRepository, IApplicationUserRepository applicationUserRepository) {
-
-            this._projectRepository = projectRepository;
-            this._projectSkillRepository = projectSkillRepository;
-            this._skillRepository = skillRepository;
-            this._interestedInProjectRepository = interestedInProjectRepository;
-            this._applicationUserRepository = applicationUserRepository;
-/*=======
-        
 
         public ProjectsService(IProjectRepository projectRepository, IInterestedInProjectRepository interestedInProjectRepository, IApplicationUserRepository applicationUserRepository) {
 
             this._projectRepository = projectRepository;
             this._interestedInProjectRepository = interestedInProjectRepository;
             this._applicationUserRepository = applicationUserRepository;
->>>>>>> origin/master*/
 
         }
 
@@ -53,28 +39,12 @@ namespace ProjectsNetwork.Services
             return project;
         }
 
-//<<<<<<< HEAD
-        public List<Skill> GetMySkills(int projectId)
-        {
-            var tempProject = this._projectSkillRepository.GetAll(proj => proj.ProjectId == projectId);
-            List<Skill> mySkills = new List<Skill>();
-            foreach (var projectSkill in tempProject)
-            {
-                mySkills.Add(this._skillRepository.Get(projectSkill.SkillId));
-            }
-            return mySkills;
-        }
+        
         public IEnumerable<Project> GetUserProjects(string userId)
         {
             return this._projectRepository.GetAll(proj => proj.UserId == userId);
         }
 
-        /*public bool PostProject(string UserId, Project project, int[] skills)
-=======
-        
-
-       
->>>>>>> origin/master*/
         public bool PostProject(Project project, int[] skills)
         {
 

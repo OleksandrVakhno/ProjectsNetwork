@@ -31,7 +31,7 @@ namespace ProjectsNetwork.Controllers
             this._skillsService = skillsService;
         }
 
-        // GET: /<controller>/
+
         [Route("")]
         public IActionResult Index()
         {
@@ -91,9 +91,13 @@ namespace ProjectsNetwork.Controllers
         }
 
         [HttpPost]
-        [Route("AddNew")]
-        public IActionResult AddNew(Skill skill)
+        [Route("AddNewSkill")]
+        public IActionResult AddNewSkill(Skill skill)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("The submitted input is not valid");
+            }
             var addedSkill = this._skillsService.AddSkill(skill);
 
             if (!addedSkill)
@@ -110,17 +114,11 @@ namespace ProjectsNetwork.Controllers
             ClaimsPrincipal currentUser = this.User;
             var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
             var project = this._projectsService.GetProject(id);
-//<<<<<<< HEAD
-            var skills = this._projectsService.GetMySkills(id);
+            var skills = this._skillsService.GetProjectSkills(id);
             var interest = project.UsersInterested.Find(interseted => interseted.UserId == currentUserID);
             var interested = interest != null;
             var learnModel = new Learn(project, skills, interested);
-            //var tupleModel = new Tuple<Project, List<Skill>>(project, skills);
             return View(learnModel);
-//=======
-            
-            //var tupleModel = new Tuple<Project, bool>(project, interested);
-            //return View(tupleModel);
         }
 
         [Route("SubmitInterest")]
@@ -140,7 +138,6 @@ namespace ProjectsNetwork.Controllers
             }
 
             return RedirectToAction("Learn", new { id = projectId });
-//>>>>>>> origin/master
         }
 
     }

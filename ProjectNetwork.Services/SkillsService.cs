@@ -13,9 +13,11 @@ namespace ProjectsNetwork.Services
 
         private readonly ISkillRepository _skillRepository;
         private readonly IUserSkillRepository _userSkillRepository;
+        private readonly IProjectSkillRepository _projectSkillRepository;
 
-        public SkillsService(ISkillRepository skillRepository, IUserSkillRepository userSkillRepository) {
+        public SkillsService(ISkillRepository skillRepository, IProjectSkillRepository projectSkillRepository, IUserSkillRepository userSkillRepository) {
             this._skillRepository = skillRepository;
+            this._projectSkillRepository = projectSkillRepository;
             this._userSkillRepository = userSkillRepository;
         }
         public IEnumerable<Skill> GetAll()
@@ -39,7 +41,7 @@ namespace ProjectsNetwork.Services
         }
 
         
-        public bool PostSkills(string UserId, int[] skills)
+        public bool PostUserSkills(string UserId, int[] skills)
         {
 
             try
@@ -103,6 +105,17 @@ namespace ProjectsNetwork.Services
                 return true;
             }
             return false;
+        }
+
+        public List<Skill> GetProjectSkills(int projectId)
+        {
+            var tempProject = this._projectSkillRepository.GetAll(proj => proj.ProjectId == projectId);
+            List<Skill> projectSkills = new List<Skill>();
+            foreach (var projectSkill in tempProject)
+            {
+                projectSkills.Add(this._skillRepository.Get(projectSkill.SkillId));
+            }
+            return projectSkills;
         }
     }
 }
