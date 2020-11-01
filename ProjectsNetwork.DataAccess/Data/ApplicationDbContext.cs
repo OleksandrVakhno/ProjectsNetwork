@@ -22,7 +22,8 @@ namespace ProjectsNetwork.Data
             modelBuilder.ApplyConfiguration<InterestedInProject>(new InterestedInProjectConfiguration());
             modelBuilder.ApplyConfiguration<UserSkill>(new UserSkillConfiguration());
             modelBuilder.ApplyConfiguration<ProjectSkill>(new ProjectSkillConfiguration());
-         }
+            modelBuilder.Entity<ApplicationUser>().Property(e => e.Id).ValueGeneratedOnAdd();
+        }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Project> Projects { get; set; }
