@@ -40,12 +40,18 @@ namespace ProjectsNetwork
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();
+
+            services.AddScoped<IUserSkillRepository, UserSkillRepository>();
+            services.AddScoped<IProjectSkillRepository, ProjectSkillRepository>();
             services.AddScoped<IInterestedInProjectRepository, InterestedInProjectRepository>();
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
             services.AddSingleton<IEmailSender, EmailSender>();
 
-            services.AddScoped<IProjectsService, ProjectsService>();
+
             services.AddScoped<ISkillsService, SkillsService>();
+            services.AddScoped<IProjectsService, ProjectsService>();
+            
+
 
             services.AddControllersWithViews();
             services.AddRazorPages();

@@ -39,6 +39,7 @@ namespace ProjectsNetwork.Services
             return project;
         }
 
+        
         public IEnumerable<Project> GetUserProjects(string userId)
         {
             return this._projectRepository.GetAll(proj => proj.UserId == userId);

@@ -16,6 +16,7 @@ using ProjectsNetwork.Services.IServices;
 namespace ProjectsNetwork.Controllers
 {
     [Authorize]
+    [Route("User/Posts")]
     [Area("User")]
     public class PostsController : Controller
     {
@@ -29,14 +30,16 @@ namespace ProjectsNetwork.Controllers
             this._projectsService = projectsService;
             this._skillsService = skillsService;
         }
-        
-        // GET: /<controller>/
+
+
+        [Route("")]
         public IActionResult Index()
         {
             var projects = this._projectsService.GetAll();
             return View(projects);
         }
 
+        [Route("MyProjects")]
         public IActionResult MyProjects()
         {
             ClaimsPrincipal currentUser = this.User;
@@ -45,6 +48,7 @@ namespace ProjectsNetwork.Controllers
             return View(projects);
         }
 
+        [Route("Post")]
         public IActionResult Post()
         {
             ClaimsPrincipal currentUser = this.User;
@@ -57,11 +61,12 @@ namespace ProjectsNetwork.Controllers
             var project = new Project();
             project.UserId = currentUserID;
            
-            var tupleModel = new Tuple<List<Skill>, Project >((List<Skill>)this._skillsService.GetAll(), project);
+            var tupleModel = new Tuple<List<Skill>, Project, Skill>((List<Skill>)this._skillsService.GetAll(), project, new Skill());
             return View(tupleModel);
         }
 
         [HttpPost]
+        [Route("Post")]
         [ValidateAntiForgeryToken]
         public IActionResult Post([Bind(Prefix = "Item2")] Project project, int[] skills)
         {
@@ -85,18 +90,38 @@ namespace ProjectsNetwork.Controllers
 
         }
 
+        [HttpPost]
+        [Route("AddNewSkill")]
+        public IActionResult AddNewSkill(Skill skill)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("The submitted input is not valid");
+            }
+            var addedSkill = this._skillsService.AddSkill(skill);
+
+            if (!addedSkill)
+            {
+                throw new Exception("Could not add skill.");
+            }
+
+            return RedirectToAction(nameof(Post));
+        }
+
+        [Route("Learn")]
         public IActionResult Learn(int id)
         {
             ClaimsPrincipal currentUser = this.User;
             var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
             var project = this._projectsService.GetProject(id);
+            var skills = this._skillsService.GetProjectSkills(id);
             var interest = project.UsersInterested.Find(interseted => interseted.UserId == currentUserID);
             var interested = interest != null;
-            var tupleModel = new Tuple<Project, bool>(project, interested);
-            return View(tupleModel);
+            var learnModel = new Learn(project, skills, interested);
+            return View(learnModel);
         }
 
-
+        [Route("SubmitInterest")]
         public IActionResult SubmitInterest(int projectId)
         {
 

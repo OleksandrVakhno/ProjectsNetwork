@@ -1,0 +1,22 @@
+﻿@model Skill 
+
+<form class="form-group text-dark" method="post" action="/User/Posts/AddNewSkill">
+    <label class="text-white">
+        <input type="radio" name="colorRadio"
+               value="other"> Other Skills
+    </label>
+    <div class="other text-white" id="other">
+        <h5>Add new skills to our list</h5>
+        <small>Please Note: If you add a skill to our list you will have to select it from the list to update your skills</small>
+        
+        <div class="row">
+            <div class="col">
+                <input type="text" class="form-control" id="newSkill" asp-for="SkillName" style="margin-right: 3rem !important" placeholder="Enter a skill and click add" />
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-light">Add Skill</button>
+            </div>
+        </div>
+
+    </div>
+</form>

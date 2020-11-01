@@ -5,7 +5,16 @@
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
-<h4>@ViewData["Title"]</h4>
+<div class="row" style="margin-top:3rem !important">
+    <div class="col-md-10">
+        <h3>@ViewData["Title"]</h3>
+    </div>
+    <div class="col-md-1">
+        <a class="btn btn-dark" id="skills" asp-route="skill">Skills</a>
+    </div>
+</div>
+
+
 <partial name="_StatusMessage" model="Model.StatusMessage" />
 <div class="row">
     <div class="col-md-6">
@@ -24,6 +33,7 @@
         </form>
     </div>
 </div>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

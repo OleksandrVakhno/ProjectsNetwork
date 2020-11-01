@@ -1,0 +1,68 @@
+﻿@model Tuple<List<Skill>, List<Skill>,Skill>
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Skills";
+}
+@section scripts{
+    <script>$(document).ready(function () {
+            $("div.other").hide();
+            $('input[type="radio"]').click(function () {
+                $("#other").show();
+            });
+
+
+        });</script>
+}
+
+<div class="row" style="margin-top:2rem !important;margin-bottom:1rem !important">
+    <div class="col-md-10">
+        <h2>My Skills</h2>
+    </div>
+    <div class="col">
+        <a class="btn btn-dark text-white" href="/Identity/Account/Manage">Profile</a>
+    </div>
+</div>
+
+<div class="text-white bg-dark" style="border-radius:1rem !important; padding: 2rem !important;margin-bottom:1rem !important">
+    @if (Model.Item2 != null)
+    {
+        <ul>
+            @foreach (var skill in Model.Item2)
+            {
+                <li>@skill.SkillName</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <h3>You don't have any skills added</h3>
+    }
+</div>
+<h2>Add New Skills</h2>
+<div class="bg-dark text-white" style="border-radius:1rem !important; padding: 2rem !important;">
+    <form id="skillPost" method="post" action="/User/Skills/PostUserSkills"><!--asp-action="Post">-->
+
+        <div class="form-group text-dark">
+            <h5 class="text-white">Choose Your Skills</h5>
+            <select class="js-example-responsive" name="skills" multiple="multiple" style="width:100%;">
+                <option value="0">None</option>
+                @if (Model.Item1 != null)
+                {
+                    foreach (var skill in Model.Item1)
+                    {
+                        <option value="@skill.Id">@skill.SkillName</option>
+                    }
+                }
+            </select>
+        </div>
+        
+
+
+
+
+        <button type="submit" class="btn btn-light">Add Skills</button>
+    </form>
+    @await Html.PartialAsync("_newSkill", Model.Item3)
+</div>
+
+

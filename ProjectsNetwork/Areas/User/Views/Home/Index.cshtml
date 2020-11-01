@@ -1,8 +1,60 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Home Page";
 }
+@section scripts{
+    <script>
+        const mainDiv = document.querySelector(".mainDiv");
+        const backImg = document.querySelector(".backImg");
+        const logo = document.querySelector(".logo");
 
-<div class="text-center">
-    <h1 class="display-4">WELCOME</h1>
-    <h2 class="display-4">TO PROJECTSNETWORK</h2>
+        mainDiv.addEventListener("mousemove", (e) => {
+            let xAxis = (window.innerWidth / 2 - e.pageX)/25;
+            let yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+
+            backImg.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+        mainDiv.addEventListener("mouseenter", (e) => {
+            backImg.style.transition = "none";
+            logo.style.transform = "translateZ(100px)"
+        })
+        mainDiv.addEventListener("mouseleave", (e) => {
+            backImg.style.transition = "all 0.5s ease";
+            backImg.style.transform = `rotateY(0deg) rotateX(0deg)`;
+            logo.style.transform = "translateZ(0px)"
+        });
+    </script>
+}
+
+<style type="text/css">
+    .backImg {
+        transform-style:preserve-3d;
+        background-image: url(../img/list.png);
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        border-radius: 20px;
+        min-height: 80vh;
+        min-width: 65vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .mainDiv{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        min-height:80vh;
+        min-width:70vw;
+        perspective: 1000px;
+    }
+    .logo{
+        width:35rem;
+        transition: all 0.75s ease-out;
+    }
+</style>
+<div class="text-center mainDiv">
+        <div class="backImg">
+            <img src="../img/logo.png" alt="PROJECTS NETWORK" class="logo"/>
+        </div>
+    
 </div>

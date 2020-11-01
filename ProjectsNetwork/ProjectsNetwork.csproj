@@ -34,4 +34,8 @@
     <ProjectReference Include="..\ProjectsNetwork.DataAccess\ProjectsNetwork.DataAccess.csproj" />
     <ProjectReference Include="..\ProjectsNetwork.Utils\ProjectsNetwork.Utils.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Areas\User\Views\Skills\" />
+    <Folder Include="wwwroot\img\" />
+  </ItemGroup>
 </Project>
