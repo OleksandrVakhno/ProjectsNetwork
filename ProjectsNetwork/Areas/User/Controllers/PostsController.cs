@@ -16,7 +16,6 @@ using ProjectsNetwork.Services.IServices;
 namespace ProjectsNetwork.Controllers
 {
     [Authorize]
-    [Route("User/Posts")]
     [Area("User")]
     public class PostsController : Controller
     {
@@ -32,23 +31,25 @@ namespace ProjectsNetwork.Controllers
         }
 
 
-        [Route("")]
         public IActionResult Index()
         {
-            var projects = this._projectsService.GetAll();
+            ClaimsPrincipal currentUser = this.User;
+            var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var projects = this._projectsService.GetAll(p => p.UserId!= currentUserID);
+            ViewData["Title"] = "Project Posts";
             return View(projects);
+
         }
 
-        [Route("MyProjects")]
         public IActionResult MyProjects()
         {
             ClaimsPrincipal currentUser = this.User;
             var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
             var projects = this._projectsService.GetUserProjects(currentUserID);
-            return View(projects);
+            ViewData["Title"] = "My Projects";
+            return View("Index", projects);
         }
 
-        [Route("Post")]
         public IActionResult Post()
         {
             ClaimsPrincipal currentUser = this.User;
@@ -66,7 +67,6 @@ namespace ProjectsNetwork.Controllers
         }
 
         [HttpPost]
-        [Route("Post")]
         [ValidateAntiForgeryToken]
         public IActionResult Post([Bind(Prefix = "Item2")] Project project, int[] skills)
         {
@@ -86,12 +86,11 @@ namespace ProjectsNetwork.Controllers
             }
 
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(MyProjects));
 
         }
 
         [HttpPost]
-        [Route("AddNewSkill")]
         public IActionResult AddNewSkill(Skill skill)
         {
             if (!ModelState.IsValid)
@@ -108,7 +107,6 @@ namespace ProjectsNetwork.Controllers
             return RedirectToAction(nameof(Post));
         }
 
-        [Route("Learn")]
         public IActionResult Learn(int id)
         {
             ClaimsPrincipal currentUser = this.User;
@@ -121,7 +119,6 @@ namespace ProjectsNetwork.Controllers
             return View(learnModel);
         }
 
-        [Route("SubmitInterest")]
         public IActionResult SubmitInterest(int projectId)
         {
 

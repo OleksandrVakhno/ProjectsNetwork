@@ -1,5 +1,31 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model ProjectsNetwork.Models.ViewModels.InterestedViewModel;
 @{
+
+    Layout = "_Layout";
+    ViewData["Title"] = "Matched Projects";
 }
+
+<script>
+    function accept(userid, projectid) {
+        window.location.href = '@Url.Action("AcceptInterest","Matches")' + '?projectId=' + projectid.toString() + '&userId=' + userid.toString();
+
+        }
+</script>
+
+<div class="container ">
+
+    @foreach (var user in Model.InterestedUsers)
+    {
+    <div class="row text-center container p-3 mb-2 bg-dark text-white" style="border-radius:1rem !important">
+        <div class="col">
+            <h4 style="text-transform: capitalize;">@user.Email</h4>
+        </div>
+        <div class="col">
+            <button type="button" class="btn btn-light" onclick="accept('@user.Id', @Model.ProjectId)">Accept</button>
+        </div>
+    </div>
+    }
+
+</div>
+
+
