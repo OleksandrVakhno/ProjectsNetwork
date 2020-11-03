@@ -15,13 +15,15 @@ namespace ProjectsNetwork.Services
         private readonly IProjectRepository _projectRepository;
         private readonly IInterestedInProjectRepository _interestedInProjectRepository;
         private readonly IApplicationUserRepository _applicationUserRepository;
+        private readonly IUserSkillRepository _userSkillRepository;
 
-        public ProjectsService(IProjectRepository projectRepository, IInterestedInProjectRepository interestedInProjectRepository, IApplicationUserRepository applicationUserRepository) {
+        public ProjectsService(IProjectRepository projectRepository, IInterestedInProjectRepository interestedInProjectRepository,
+            IApplicationUserRepository applicationUserRepository, IUserSkillRepository userSkillRepository) {
 
             this._projectRepository = projectRepository;
             this._interestedInProjectRepository = interestedInProjectRepository;
             this._applicationUserRepository = applicationUserRepository;
-
+            this._userSkillRepository = userSkillRepository;
         }
 
         
@@ -48,6 +50,7 @@ namespace ProjectsNetwork.Services
                     throw new Exception("Interested user is not found in the system");
 
                 }
+                user.Skills = this._userSkillRepository.GetAll(s => s.UserId == user.Id, null, "Skill").ToList();
                 interestedUsers.Add(user);
             }
 
@@ -55,11 +58,11 @@ namespace ProjectsNetwork.Services
         }
 
 
-        public IEnumerable<Project> GetAcceptedProjects(string userId)
+        public IEnumerable<InterestedInProject> GetAcceptedProjects(string userId)
         {
             //TODO: rethink quering if there is time as this will be slow
             var userProjects = this.GetUserProjects(userId).Select(p => p.Id).ToList();
-            var accepted = this._interestedInProjectRepository.GetAll(i => userProjects.Contains(i.ProjectId) && i.Confirmed, null, "Project").Select( i => i.Project).ToList();
+            var accepted = this._interestedInProjectRepository.GetAll(i => userProjects.Contains(i.ProjectId) && i.Confirmed, null, "Project,User");
             if (accepted == null)
             {
                 throw new Exception("Couldn't get interested in the specified project");
@@ -70,9 +73,9 @@ namespace ProjectsNetwork.Services
 
         }
 
-        public IEnumerable<Project> GetMatches(string userId)
+        public IEnumerable<InterestedInProject> GetMatches(string userId)
         {
-            var matches = this._interestedInProjectRepository.GetAll(i => i.UserId == userId && i.Confirmed, null, "Project").Select(i => i.Project).ToList();
+            var matches = this._interestedInProjectRepository.GetAll(i => i.UserId == userId && i.Confirmed, null, "Project,User");
             if (matches == null)
             {
                 throw new Exception("Couldn't get matches for the specified user");

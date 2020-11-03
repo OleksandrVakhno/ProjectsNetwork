@@ -21,6 +21,12 @@
             <h4 style="text-transform: capitalize;">@user.Email</h4>
         </div>
         <div class="col">
+            @foreach (var skill in user.Skills)
+            {
+                <h4 style="text-transform: capitalize;">@skill.Skill.SkillName ,  </h4>
+            }
+        </div>
+        <div class="col">
             <button type="button" class="btn btn-light" onclick="accept('@user.Id', @Model.ProjectId)">Accept</button>
         </div>
     </div>
