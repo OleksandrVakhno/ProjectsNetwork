@@ -17,7 +17,13 @@ namespace ProjectsNetwork.DataAccess.Repositories
         }
         public void Update(InterestedInProject interestedInProject)
         {
-            throw new NotImplementedException();
+            var oldInterest = this._db.InterestedInProjects.Find(interestedInProject.UserId, interestedInProject.ProjectId);
+            if (oldInterest == null)
+            {
+                throw new Exception("Interested in project is not found");
+            }
+
+            oldInterest.Confirmed = interestedInProject.Confirmed;
         }
     }
 }

@@ -16,7 +16,7 @@ model Tuple<Project, bool>
 }
 <script>
         function post(projectId) {
-            window.location.href = '@Url.Action("SubmitInterest", "Posts")' + "/?projectId=" + projectId.toString();
+            window.location.href = '@Url.Action("SubmitInterest", "Posts")' + "?projectId=" + projectId.toString();
         }
 
 </script>

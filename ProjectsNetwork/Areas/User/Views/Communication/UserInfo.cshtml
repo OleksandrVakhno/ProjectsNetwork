@@ -1,0 +1,35 @@
+﻿@model ApplicationUser
+@{
+
+    Layout = "_Layout";
+    ViewData["Title"] = Model.UserName;
+}
+
+<h1 class="text-center" style="text-transform:uppercase; font-family: Impact, Charcoal, sans-serif">@Model.UserName</h1>
+<div class="container p-3 mb-2 bg-dark text-white" style="border-radius:1rem !important">
+    <h4>Email:</h4>
+    <div class="row">
+        <div class="col">
+            <p>@Model.Email</p>
+        </div>
+    </div>
+    <h4>SKILLS:</h4>
+    <div class="row">
+        <div class="col">
+            @if (Model.Skills != null)
+            {
+                <ul>
+                    @foreach (var skill in Model.Skills)
+                    {
+                        <li>@skill.Skill.SkillName</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <h3>No preffered skills for this project</h3>
+            }
+        </div>
+
+    </div>
+</div>
