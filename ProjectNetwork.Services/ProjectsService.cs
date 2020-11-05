@@ -102,6 +102,30 @@ namespace ProjectsNetwork.Services
             return this._projectRepository.GetAll(proj => proj.UserId == userId);
         }
 
+        public IEnumerable<Project> GetFiltered(string filterWord)
+        {
+            List<Project> filtered = new List<Project>();
+
+            var projects = this._projectRepository.GetAll();
+
+            foreach( var p in projects)
+            {
+                if (p.PrefferedSkills != null)
+                {
+                    foreach (var projSkill in p.PrefferedSkills)
+                    {
+                        if (projSkill.Skill.SkillName.Contains(filterWord))
+                        {
+                            filtered.Add(p);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return filtered;
+        }
+
         public bool PostProject(Project project, int[] skills)
         {
 
@@ -193,5 +217,7 @@ namespace ProjectsNetwork.Services
 
             return true;
         }
+
+
     }
 }

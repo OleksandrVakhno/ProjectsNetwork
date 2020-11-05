@@ -31,12 +31,19 @@ namespace ProjectsNetwork.Controllers
         }
 
 
-        public IActionResult Index()
+        public IActionResult Index(string filterWord)
         {
             ClaimsPrincipal currentUser = this.User;
             var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
             var projects = this._projectsService.GetAll(p => p.UserId!= currentUserID);
             ViewData["Title"] = "Project Posts";
+            ViewData["CurrentFilter"] = filterWord;
+
+            if (!String.IsNullOrEmpty(filterWord))
+            {
+                projects = this._projectsService.GetFiltered(filterWord);
+            }
+
             return View(projects);
 
         }
