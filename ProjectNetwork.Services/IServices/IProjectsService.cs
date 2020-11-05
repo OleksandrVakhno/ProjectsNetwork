@@ -12,6 +12,7 @@ namespace ProjectsNetwork.Services.IServices
         Project GetProject(int Id);
         bool PostProject(Project project, int[] skills);
         bool SubmitInterest(string userId, int projectId);
+        IEnumerable<Project> GetFiltered(string searchString);
 
     }
 }

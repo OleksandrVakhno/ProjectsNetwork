@@ -33,10 +33,24 @@ namespace ProjectsNetwork.Controllers
 
 
         [Route("")]
-        public IActionResult Index()
+        public IActionResult Index(string filter)
         {
+            ViewData["CurrentFilter"] = filter;
+           
             var projects = this._projectsService.GetAll();
+
+            if (filter!=null)
+            {
+                projects = this._projectsService.GetFiltered(filter);
+
+                if (projects == null)
+                {
+                    return NotFound("Could Not Find Projects");
+                }
+            }
+
             return View(projects);
+            
         }
 
         [Route("MyProjects")]

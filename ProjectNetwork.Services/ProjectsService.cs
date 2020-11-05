@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace ProjectsNetwork.Services
@@ -14,6 +15,7 @@ namespace ProjectsNetwork.Services
         private readonly IProjectRepository _projectRepository;
         private readonly IInterestedInProjectRepository _interestedInProjectRepository;
         private readonly IApplicationUserRepository _applicationUserRepository;
+        private readonly ISkillsService skillsService;
 
         public ProjectsService(IProjectRepository projectRepository, IInterestedInProjectRepository interestedInProjectRepository, IApplicationUserRepository applicationUserRepository) {
 
@@ -122,6 +124,32 @@ namespace ProjectsNetwork.Services
             {
                 throw new Exception("Failed to submit the interest: " + e.Message);
             }
+        }
+
+        public IEnumerable<Project> GetFiltered(string searchString)
+        {
+            var projects = this._projectRepository.GetAll();
+            var skill = this.skillsService;
+            List<Project> filtered = null;
+
+            
+                foreach (Project p in projects)
+                {
+                    foreach (ProjectSkill pref in p.PrefferedSkills)
+                    {
+                        if(pref.Skill.SkillName.Contains(searchString))
+                        {
+                            filtered.Add(p);
+                        }
+                    else
+                    {
+                        return null;
+                    }
+                    }
+                }
+            
+
+            return filtered;
         }
     }
 }

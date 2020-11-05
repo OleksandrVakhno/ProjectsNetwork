@@ -12,27 +12,38 @@
         }
 </script>
     
-    <div class="container ">
-        
-        @foreach(var project in Model)
-        {
-            <div class="row text-center container p-3 mb-2 bg-dark text-white" style="border-radius:1rem !important">
-                <div class="col">
-                    <h4 style="text-transform: capitalize;">@project.Name</h4>
-                </div>
-                <div class="col">
-                    <p>@project.Description</p>
-                </div>
-                <div class="col">
-                    
-                    <button type="button" class="btn btn-light" onclick="learn(@project.Id)" >Learn More</button>
-                </div>
+
+
+<div class="container ">
+    <form asp-action="Index" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Search By Skill: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                <input type="submit" value="Search" class="btn btn-default" /> |
+                <a asp-action="Index">Back to Full List</a>
+            </p>
+        </div>
+    </form>
+
+    @foreach (var project in Model)
+    {
+        <div class="row text-center container p-3 mb-2 bg-dark text-white" style="border-radius:1rem !important">
+            <div class="col">
+                <h4 style="text-transform: capitalize;">@project.Name</h4>
             </div>
-        }
-        
-        
+            <div class="col">
+                <p>@project.Description</p>
+            </div>
+            <div class="col">
+
+                <button type="button" class="btn btn-light" onclick="learn(@project.Id)">Learn More</button>
+            </div>
+        </div>
+    }
 
 
-    </div>
+
+
+</div>
 
 
