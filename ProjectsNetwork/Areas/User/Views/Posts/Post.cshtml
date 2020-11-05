@@ -14,7 +14,6 @@
         });</script>
 }
 <div class="bg-dark text-white" style="border-radius:1rem !important; padding: 2rem !important;">
-    <small>Warning: The filled form will be reset if new skills are added to our list, please check our list and skills before filling the res</small>
     <form id="projectPost" method="post" action="/User/Posts/Post">
         <div class="form-group">
             <label>Project Name</label>
@@ -30,7 +29,6 @@
         <div class="form-group text-dark">
 
             <select class="js-example-responsive" name="skills" multiple="multiple" style="width:100%;">
-                <option value="0">None</option>
                 @if (Model.Item1 != null)
                 {
                     foreach (var skill in Model.Item1)
@@ -42,7 +40,7 @@
         </div>
 
 
-
+        @Html.AntiForgeryToken()
         <button type="submit" class="btn btn-light">Post Project</button>
     </form>
     @await Html.PartialAsync("_newSkill", Model.Item3)

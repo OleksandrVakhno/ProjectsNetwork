@@ -1,29 +1,30 @@
 ﻿@model List<ProjectsNetwork.Models.Project>;
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> userManager
 @{
 
     Layout = "_Layout";
-    ViewData["Title"] = "Projects Posts";
 }
-
 <script>
+        function post() {
+
+            window.location.href = '@Url.Action("Post", "Posts")';
+        }
         function learn(id) {
-            window.location.href = '@Url.Action("Learn","Posts")' + "/?id=" + id.toString();
+            window.location.href = '@Url.Action("Learn","Posts")' + "?id=" + id.toString();
 
         }
+        function interested(id) {
+            window.location.href = '@Url.Action("Interested", "Matches")' + "?projectId=" + id.toString();
+        }
 </script>
-    
-
-
 <div class="container ">
-    <form asp-action="Index" method="get">
-        <div class="form-actions no-color">
-            <p>
-                Search By Skill: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-                <input type="submit" value="Search" class="btn btn-default" /> |
-                <a asp-action="Index">Back to Full List</a>
-            </p>
+    <div class="row" style="margin-top: 2%; margin-bottom: 2%">
+        <div class="col-2 offset-md-10">
+
+            <button type="button" class="btn btn-dark" onclick="post()">Post Project</button>
         </div>
-    </form>
+    </div>
 
     @foreach (var project in Model)
     {
@@ -37,6 +38,11 @@
             <div class="col">
 
                 <button type="button" class="btn btn-light" onclick="learn(@project.Id)">Learn More</button>
+                @if (project.UserId == userManager.GetUserId(User))
+                {
+                    <button type="button" class="btn btn-light" onclick="interested(@project.Id)">Interested Users</button>
+                }
+
             </div>
         </div>
     }

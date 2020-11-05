@@ -4,8 +4,8 @@ using ProjectsNetwork.Services.IServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace ProjectsNetwork.Services
@@ -15,19 +15,74 @@ namespace ProjectsNetwork.Services
         private readonly IProjectRepository _projectRepository;
         private readonly IInterestedInProjectRepository _interestedInProjectRepository;
         private readonly IApplicationUserRepository _applicationUserRepository;
-        private readonly ISkillsService skillsService;
+        private readonly IUserSkillRepository _userSkillRepository;
 
-        public ProjectsService(IProjectRepository projectRepository, IInterestedInProjectRepository interestedInProjectRepository, IApplicationUserRepository applicationUserRepository) {
+        public ProjectsService(IProjectRepository projectRepository, IInterestedInProjectRepository interestedInProjectRepository,
+            IApplicationUserRepository applicationUserRepository, IUserSkillRepository userSkillRepository) {
 
             this._projectRepository = projectRepository;
             this._interestedInProjectRepository = interestedInProjectRepository;
             this._applicationUserRepository = applicationUserRepository;
+            this._userSkillRepository = userSkillRepository;
+        }
+
+        
+        public IEnumerable<Project> GetAll(Expression<Func<Project, bool>> filter = null)
+        {
+            return this._projectRepository.GetAll(filter);
+        }
+
+        public IEnumerable<ApplicationUser> GetInterested(int projectId)
+        {
+            var interested = this._interestedInProjectRepository.GetAll(i => i.ProjectId == projectId && !i.Confirmed);
+            if (interested == null)
+            {
+                throw new Exception("Couldn't get interested in the specified project");
+            }
+
+            List<ApplicationUser> interestedUsers = new List<ApplicationUser>();
+
+            foreach( var interest in interested)
+            {
+                var user = this._applicationUserRepository.Get(interest.UserId);
+                if (user == null)
+                {
+                    throw new Exception("Interested user is not found in the system");
+
+                }
+                user.Skills = this._userSkillRepository.GetAll(s => s.UserId == user.Id, null, "Skill").ToList();
+                interestedUsers.Add(user);
+            }
+
+            return interestedUsers;
+        }
+
+
+        public IEnumerable<InterestedInProject> GetAcceptedProjects(string userId)
+        {
+            //TODO: rethink quering if there is time as this will be slow
+            var userProjects = this.GetUserProjects(userId).Select(p => p.Id).ToList();
+            var accepted = this._interestedInProjectRepository.GetAll(i => userProjects.Contains(i.ProjectId) && i.Confirmed, null, "Project,User");
+            if (accepted == null)
+            {
+                throw new Exception("Couldn't get interested in the specified project");
+            }
+
+           
+            return accepted;
 
         }
 
-        public IEnumerable<Project> GetAll()
+        public IEnumerable<InterestedInProject> GetMatches(string userId)
         {
-            return this._projectRepository.GetAll();
+            var matches = this._interestedInProjectRepository.GetAll(i => i.UserId == userId && i.Confirmed, null, "Project,User");
+            if (matches == null)
+            {
+                throw new Exception("Couldn't get matches for the specified user");
+
+            }
+
+            return matches;
         }
 
         public Project GetProject(int Id)
@@ -126,30 +181,17 @@ namespace ProjectsNetwork.Services
             }
         }
 
-        public IEnumerable<Project> GetFiltered(string searchString)
+        public bool AcceptInterest(string userId, int projectId)
         {
-            var projects = this._projectRepository.GetAll();
-            var skill = this.skillsService;
-            List<Project> filtered = null;
+            var acceptedInterest = new InterestedInProject { UserId = userId, ProjectId = projectId, Confirmed = true };
+            this._interestedInProjectRepository.Update(acceptedInterest);
+            var result = this._interestedInProjectRepository.Save();
+            if (result == 0)
+            {
+                return false;
+            }
 
-            
-                foreach (Project p in projects)
-                {
-                    foreach (ProjectSkill pref in p.PrefferedSkills)
-                    {
-                        if(pref.Skill.SkillName.Contains(searchString))
-                        {
-                            filtered.Add(p);
-                        }
-                    else
-                    {
-                        return null;
-                    }
-                    }
-                }
-            
-
-            return filtered;
+            return true;
         }
     }
 }
