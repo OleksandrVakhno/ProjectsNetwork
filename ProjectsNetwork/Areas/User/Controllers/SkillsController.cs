@@ -26,7 +26,7 @@ namespace ProjectsNetwork.Controllers
         }
 
         // GET: /<controller>/
-        public IActionResult Index(string searchString)
+        public IActionResult Index()
         {
             
             
