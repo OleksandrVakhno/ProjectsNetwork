@@ -26,12 +26,13 @@
 <div class="text-white bg-dark" style="border-radius:1rem !important; padding: 2rem !important;margin-bottom:1rem !important">
     @if (Model.Item2 != null)
     {
-        <ul>
+        <div class="row" style="width:50%">
             @foreach (var skill in Model.Item2)
             {
-                <li>@skill.SkillName</li>
+                <div class="col-md-6"><h4><span class="badge badge-light">@skill.SkillName</span></h4></div>
             }
-        </ul>
+        </div>
+        
     }
     else
     {

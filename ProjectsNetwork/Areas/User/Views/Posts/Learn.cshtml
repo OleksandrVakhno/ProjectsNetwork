@@ -55,12 +55,13 @@ model Tuple<Project, bool>
                 <div class="col">
                     @if (Model.Skills != null)
                     {
-                        <ul>
+                        <div class="row" style="width:50%">
                             @foreach (var skill in Model.Skills)
                             {
-                                <li>@skill.SkillName</li>
+                                <div class="col-md-6"><h5><span class="badge badge-light">@skill.SkillName</span></h5></div>
                             }
-                        </ul>
+                        </div>
+                        
                     }
                     else
                     {
