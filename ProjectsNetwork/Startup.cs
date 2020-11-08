@@ -15,6 +15,7 @@ using ProjectsNetwork.Services.IServices;
 using ProjectsNetwork.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using ProjectsNetwork.Utils;
+using ProjectsNetwork.Services.IApplicationService;
 
 namespace ProjectsNetwork
 {
@@ -50,6 +51,7 @@ namespace ProjectsNetwork
 
             services.AddScoped<ISkillsService, SkillsService>();
             services.AddScoped<IProjectsService, ProjectsService>();
+            services.AddScoped<IApplicationUserService, ApplicationUserService>();
             
 
 

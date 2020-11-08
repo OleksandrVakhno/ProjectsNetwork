@@ -35,7 +35,12 @@ namespace ProjectsNetwork.Controllers
             {
                 return NotFound("User not found");
             }
-            var mySkills = this._skillsService.GetMySkills(currentUserID);
+            var userSkills = this._skillsService.GetMySkills(currentUserID);
+            var mySkills = new List<Skill>();
+            foreach(UserSkill userSkill in userSkills)
+            {
+                mySkills.Add(userSkill.Skill);
+            }
             var tupleModel = new Tuple<List<Skill>, List<Skill>, Skill>((List<Skill>)skills, mySkills, new Skill());
             return View(tupleModel);
         }

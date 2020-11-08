@@ -3,6 +3,7 @@ using ProjectsNetwork.Models;
 using ProjectsNetwork.Services.IServices;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ProjectsNetwork.Services
@@ -29,16 +30,18 @@ namespace ProjectsNetwork.Services
             return this._skillRepository.Get(id);
         }
 
-        public List<Skill> GetMySkills(String userId)
+        public List<UserSkill> GetMySkills(String userId)
         {
-            var tempSkils = this._userSkillRepository.GetAll(skills => skills.UserId == userId);
-            List<Skill> mySkills = new List<Skill>();
+            var mySkills = this._userSkillRepository.GetAll(skills => skills.UserId == userId).ToList();
+            /*List<Skill> mySkills = new List<Skill>();
             foreach (var userSkill in tempSkils)
             {
                 mySkills.Add(GetASkill(userSkill.SkillId));
-            }
+            }*/
             return mySkills;
         }
+
+        
 
         
         public bool PostUserSkills(string UserId, int[] skills)

@@ -7,7 +7,7 @@
 
 <script>
         function contact(id) {
-            window.location.href = '@Url.Action("UserInfo","Communication")' + "?id=" + id.toString();
+            window.location.href = '@Url.Action("UserInfo","Communication")' + "?id=" + id;
 
         }
 </script>
@@ -21,11 +21,7 @@
                 <h4 style="text-transform: capitalize;">@interested.Project.Name</h4>
             </div>
             <div class="col">
-                <p>@interested.User.Email</p>
-            </div>
-            <div class="col">
-
-                <button type="button" class="btn btn-light" onclick="contact('@interested.UserId')">Contact</button>
+                <button type="button" class="btn btn-light" onclick="contact('@interested.ProjectId')">Contact</button>
             </div>
         </div>
     }
