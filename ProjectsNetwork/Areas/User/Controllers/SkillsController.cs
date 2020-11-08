@@ -28,6 +28,8 @@ namespace ProjectsNetwork.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
+            
+            
             var skills = this._skillsService.GetAll();
             ClaimsPrincipal currentUser = this.User;
             var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;

@@ -25,7 +25,11 @@ model Tuple<Project, bool>
     {
         <div class="row" style="margin-top: 2%; margin-bottom: 2%">
             <div class="col-2 offset-md-10">
-                @if (Model.Request)
+                @if (Model.Accepted)
+                {
+                    <i class="icon-ok-sign" style="color:green">User accepted your interest</i>
+                }
+                else if (Model.Request)
                 {
                     <i class="icon-ok-sign" style="color:green">Interest Submitted</i>
                 }
@@ -41,7 +45,6 @@ model Tuple<Project, bool>
     }
 
 
-<!--<<<<<<< HEAD-->
         <h1 class="text-center" style="text-transform:uppercase; font-family: Impact, Charcoal, sans-serif">@Model.Project.Name</h1>
         <div class="container p-3 mb-2 bg-dark text-white" style="border-radius:1rem !important">
             <h4>DESCRIPTION:</h4>
@@ -68,30 +71,8 @@ model Tuple<Project, bool>
                         <h3>No preffered skills for this project</h3>
                     }
                 </div>
-<!--=======-
-
-
-    <h1 class="text-center" style="text-transform:uppercase; font-family: Impact, Charcoal, sans-serif">Model.Project.Name</h1>
-    <div class="container p-3 mb-2 bg-dark text-white" style="border-radius:1rem !important">
-        <h4>DESCRIPTION:</h4>
-        <div class="row">
-            <div class="col">
-                <p>Model.Project.Description</p>
-            </div>
-        </div>
-        <h4>PREFERED SKILLS:</h4>
-        <div class="row">
-            <div class="col">
-                <p>Model.Item1.PrefferedSkills</p>
->>>>>>> origin/master-->
             </div>
         
-        <h4>TOPICS:</h4>
-        <div class="row">
-            <div class="col">
-                <p>AREAS OF INTEREST...Wher is this at??</p>
-            </div>
-        </div>
     </div>
 
 </div>
