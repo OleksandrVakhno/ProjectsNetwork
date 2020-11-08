@@ -35,13 +35,17 @@ namespace ProjectsNetwork.Controllers
         {
             ClaimsPrincipal currentUser = this.User;
             var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var projects = this._projectsService.GetAll(p => p.UserId!= currentUserID);
+            IEnumerable<Project> projects;
             ViewData["Title"] = "Project Posts";
             ViewData["CurrentFilter"] = filterWord;
 
             if (!String.IsNullOrEmpty(filterWord))
             {
-                projects = this._projectsService.GetFiltered(filterWord);
+                projects = this._projectsService.GetFiltered(filterWord, p => p.UserId != currentUserID);
+            }
+            else
+            {
+                projects = this._projectsService.GetAll(p => p.UserId != currentUserID);
             }
 
             return View(projects);
@@ -122,7 +126,12 @@ namespace ProjectsNetwork.Controllers
             var skills = this._skillsService.GetProjectSkills(id);
             var interest = project.UsersInterested.Find(interseted => interseted.UserId == currentUserID);
             var interested = interest != null;
-            var learnModel = new Learn(project, skills, interested);
+            var accepted = false;
+            if (interested)
+            {
+                accepted = interest.Confirmed;
+            }
+            var learnModel = new Learn(project, skills,accepted, interested);
             return View(learnModel);
         }
 

@@ -16,14 +16,16 @@ namespace ProjectsNetwork.Services
         private readonly IInterestedInProjectRepository _interestedInProjectRepository;
         private readonly IApplicationUserRepository _applicationUserRepository;
         private readonly IUserSkillRepository _userSkillRepository;
+        private readonly ISkillRepository _skillRepository;
 
         public ProjectsService(IProjectRepository projectRepository, IInterestedInProjectRepository interestedInProjectRepository,
-            IApplicationUserRepository applicationUserRepository, IUserSkillRepository userSkillRepository) {
+            IApplicationUserRepository applicationUserRepository, IUserSkillRepository userSkillRepository, ISkillRepository skillRepository) {
 
             this._projectRepository = projectRepository;
             this._interestedInProjectRepository = interestedInProjectRepository;
             this._applicationUserRepository = applicationUserRepository;
             this._userSkillRepository = userSkillRepository;
+            this._skillRepository = skillRepository;
         }
 
         
@@ -102,19 +104,22 @@ namespace ProjectsNetwork.Services
             return this._projectRepository.GetAll(proj => proj.UserId == userId);
         }
 
-        public IEnumerable<Project> GetFiltered(string filterWord)
+        public IEnumerable<Project> GetFiltered(string filterSkill, Expression<Func<Project, bool>> filterAll = null)
         {
             List<Project> filtered = new List<Project>();
 
-            var projects = this._projectRepository.GetAll();
+            var projects = this._projectRepository.GetAll(filterAll, null, "PrefferedSkills");
+           
 
             foreach( var p in projects)
             {
                 if (p.PrefferedSkills != null)
                 {
+                    //TODO: Write function in IProjectRepository to do the query in SQL to improve perfomance
                     foreach (var projSkill in p.PrefferedSkills)
                     {
-                        if (projSkill.Skill.SkillName.Contains(filterWord))
+                        projSkill.Skill = this._skillRepository.Get(projSkill.SkillId);
+                        if (projSkill.Skill.SkillName.Contains(filterSkill))
                         {
                             filtered.Add(p);
                             break;

@@ -13,7 +13,7 @@ namespace ProjectsNetwork.Services.IServices
         IEnumerable<ApplicationUser> GetInterested(int projectId); //users interested in my project
         IEnumerable<InterestedInProject> GetAcceptedProjects(string userId); //my projects that I accepted interest to
         IEnumerable<InterestedInProject> GetMatches(string userId); // other people's projects that confirmed my interest
-        IEnumerable<Project> GetFiltered(string filterWord); //filter the projects based on skill
+        IEnumerable<Project> GetFiltered(string filterSkill, Expression<Func<Project, bool>> filterAll = null); //filter the projects based on skill
         Project GetProject(int Id);
         bool PostProject(Project project, int[] skills);
         bool SubmitInterest(string userId, int projectId);
