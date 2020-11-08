@@ -68,19 +68,5 @@ namespace ProjectsNetwork.Areas.User.Controllers
         }
 
 
-        public IActionResult Contact(string email)
-        {
-            var emailModel = new EmailModel();
-            emailModel.email = email;
-            return View(emailModel);
-        }
-
-        [HttpPost]
-        public IActionResult SendEmail(EmailModel emailModel)
-        {
-            var email = new EmailSender();
-            email.SendEmailAsync(emailModel.email, emailModel.subject, emailModel.htmlMessage);
-            return RedirectToAction("Matches", "Matches");
-        }
     }
 }
