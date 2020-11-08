@@ -17,6 +17,10 @@ model Tuple<Project, bool>
 <script>
         function post(projectId) {
             window.location.href = '@Url.Action("SubmitInterest", "Posts")' + "?projectId=" + projectId.toString();
+    }
+    function contact(id) {
+            window.location.href = '@Url.Action("UserInfo","Communication")' + "?id=" + id;
+
         }
 
 </script>
@@ -28,6 +32,7 @@ model Tuple<Project, bool>
                 @if (Model.Accepted)
                 {
                     <i class="icon-ok-sign" style="color:green">User accepted your interest</i>
+                    <button type="button" class="btn btn-light" onclick="contact('@Model.Project.Id')">Contact</button>
                 }
                 else if (Model.Request)
                 {
