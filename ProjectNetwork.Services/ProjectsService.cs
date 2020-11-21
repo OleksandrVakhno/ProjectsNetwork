@@ -210,6 +210,33 @@ namespace ProjectsNetwork.Services
             }
         }
 
+        public bool CancelInterest (String userId, int projectId)
+        {
+            try
+            {
+                var interestedIn = this._interestedInProjectRepository.Get(userId, projectId);
+                if (interestedIn == null)
+                {
+                    return false;
+                }
+                this._interestedInProjectRepository.Remove(interestedIn);
+
+                var result = this._interestedInProjectRepository.Save();
+                if (result == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch(Exception e)
+            {
+                throw new Exception("Interest does not exist: " + e.Message);
+
+            }
+
+
+        }
+
         public bool AcceptInterest(string userId, int projectId)
         {
             var acceptedInterest = new InterestedInProject { UserId = userId, ProjectId = projectId, Confirmed = true };

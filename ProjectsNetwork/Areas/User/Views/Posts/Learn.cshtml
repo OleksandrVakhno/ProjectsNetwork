@@ -14,16 +14,22 @@ model Tuple<Project, bool>
     Layout = "_Layout";
     ViewData["Title"] = Model.Project.Name;
 }
-<script>
+    <script>
         function post(projectId) {
             window.location.href = '@Url.Action("SubmitInterest", "Posts")' + "?projectId=" + projectId.toString();
     }
+        function cancel(projectId) {
+            window.location.href = '@Url.Action("CancelInterest", "Posts")' + "?projectId=" + projectId.toString();
+
+
+    }
+
     function contact(id) {
             window.location.href = '@Url.Action("UserInfo","Communication")' + "?id=" + id;
 
-        }
-
-</script>
+    }
+    
+    </script>
 <div class="container">
     @if (Model.Project.UserId != userManager.GetUserId(User))
     {
@@ -34,8 +40,11 @@ model Tuple<Project, bool>
                     <i class="icon-ok-sign" style="color:green">User accepted your interest</i>
                     <button type="button" class="btn btn-light" onclick="contact('@Model.Project.Id')">Contact</button>
                 }
-                else if (Model.Request)
+                
+
+                else if (Model.Request && !Model.Accepted)
                 {
+                    <button type="button" class="btn btn-dark" onclick="cancel(@Model.Project.Id)">CANCEL INTEREST</button>
                     <i class="icon-ok-sign" style="color:green">Interest Submitted</i>
                 }
                 else

@@ -18,6 +18,6 @@ namespace ProjectsNetwork.Services.IServices
         bool PostProject(Project project, int[] skills);
         bool SubmitInterest(string userId, int projectId);
         bool AcceptInterest(string userId, int projectId);
-
+        bool CancelInterest(string currentUserID, int projectId);
     }
 }
