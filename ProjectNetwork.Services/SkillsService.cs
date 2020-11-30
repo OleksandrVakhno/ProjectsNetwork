@@ -75,12 +75,9 @@ namespace ProjectsNetwork.Services
                         return false;
                     }
 
-
-
                 }
 
                 
-
                 return true;
 
             }
