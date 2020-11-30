@@ -12,8 +12,13 @@ namespace ProjectsNetwork.DataAccess.Repositories.MockRepositories
     {
         public EntityEntry<ProjectSkill> Insert(ProjectSkill item)
         {
-            if (this.failure)
+            if (this.insertFailure)
             {
+                if (throwsException)
+                {
+                    throw this.e;
+                }
+
                 return null;
             }
             string key =  item.ProjectId.ToString() + item.SkillId.ToString() ;

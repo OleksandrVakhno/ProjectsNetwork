@@ -59,9 +59,11 @@ namespace ProjectsNetwork.Tests.ServicesTests
         [Fact]
         public void GetASkillTest()
         {
+            //skills returned
             var skill = this._skillService.GetASkill(1);
             Assert.NotNull(skill);
 
+            //no skills exist
             skill = this._skillService.GetASkill(3);
             Assert.Null(skill);
         }
@@ -69,9 +71,11 @@ namespace ProjectsNetwork.Tests.ServicesTests
         [Fact]
         public void GetMySkillsTest()
         {
+            //skills returned
             var skills = this._skillService.GetMySkills("1");
             Assert.NotEmpty(skills);
 
+            //no skills exist
             skills = this._skillService.GetMySkills("3");
             Assert.Empty(skills);
         }
@@ -80,10 +84,74 @@ namespace ProjectsNetwork.Tests.ServicesTests
         [Fact]
         public void PostUserSkillsTest()
         {
+            //failure to insert
+            _userSkillRepository.setInsertFailure(true);
+            var result = _skillService.PostUserSkills("1", new int[] { 0, 1 });
+            Assert.False(result);
+            _userSkillRepository.setThrowsException(true);
+            Assert.Throws<Exception>(() => _skillService.PostUserSkills("1", new int[] { 0, 1 })); //testing exception while inserting
+            _userSkillRepository.setInsertFailure(false);
+            _userSkillRepository.setThrowsException(false);
+
+
+            //failure to save
+            _userSkillRepository.setSaveFailure(true);
+            result = _skillService.PostUserSkills("1", new int[] { 0, 1 });
+            Assert.False(result);
+            _userSkillRepository.setThrowsException(true);
+            Assert.Throws<Exception>(() => _skillService.PostUserSkills("1", new int[] { 0, 1 })); //testing exception while saving
+            _userSkillRepository.setSaveFailure(false);
+            _userSkillRepository.setThrowsException(false);
+
+
+            //successful execution
+            result = _skillService.PostUserSkills("1", new int[] { 0, 1 });
+            Assert.True(result);
 
         }
 
 
+        [Fact]
+        public void AddSkillTest()
+        {
+            //failure to insert
+            _skillRepository.setInsertFailure(true);
+            var result = _skillService.AddSkill(new Skill { Id = 1, SkillName = "C#" });
+            Assert.False(result);
+            _skillRepository.setThrowsException(true);
+            Assert.Throws<Exception>(() => _skillService.AddSkill(new Skill { Id = 1, SkillName = "C#" }));
+            _skillRepository.setInsertFailure(false);
+            _skillRepository.setThrowsException(false);
+
+
+            //failure to save
+            _skillRepository.setSaveFailure(true);
+            result = _skillService.AddSkill(new Skill { Id = 1, SkillName = "C#" });
+            Assert.False(result);
+            _skillRepository.setThrowsException(true);
+            Assert.Throws<Exception>(() => _skillService.AddSkill(new Skill { Id = 1, SkillName = "C#" }));
+            _skillRepository.setSaveFailure(false);
+            _skillRepository.setThrowsException(false);
+
+            //successful execution
+            result = _skillService.AddSkill(new Skill { Id = 1, SkillName = "C#" });
+            Assert.True(result);
+
+        }
+
+
+        [Fact]
+        public void GetProjectSkillsTest()
+        {
+            //skills returned
+            var skills = this._skillService.GetProjectSkills(1);
+            Assert.NotEmpty(skills);
+
+            //no skills exist
+            skills = this._skillService.GetProjectSkills(3);
+            Assert.Empty(skills);
+
+        }
 
 
     }

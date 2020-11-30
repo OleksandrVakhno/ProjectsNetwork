@@ -12,8 +12,13 @@ namespace ProjectsNetwork.DataAccess.Repositories.MockRepositories
     {
         EntityEntry<ApplicationUser> IRepository<ApplicationUser>.Insert(ApplicationUser item)
         {
-            if (this.failure)
+            if (this.insertFailure)
             {
+                if (throwsException)
+                {
+                    throw this.e;
+                }
+
                 return null;
             }
             string key = item.Id;

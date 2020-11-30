@@ -16,7 +16,11 @@ namespace ProjectsNetwork.DataAccess.Repositories.MockRepositories
         
 
         protected readonly Dictionary<string, T> db = new Dictionary<string, T>();
-        protected bool failure = false;
+        protected bool saveFailure = false;
+        protected bool removeFailure = false;
+        protected bool insertFailure = false;
+        protected bool throwsException = false;
+        protected readonly Exception e = new Exception("Test exception");
 
         public T Get(params object[] ids)
         {
@@ -49,8 +53,13 @@ namespace ProjectsNetwork.DataAccess.Repositories.MockRepositories
         public EntityEntry<T> Remove(T item)
         {
 
-            if (failure)
+            if (removeFailure)
             {
+                if (throwsException)
+                {
+                    throw this.e;
+                }
+
                 return null;
             }
             
@@ -75,8 +84,13 @@ namespace ProjectsNetwork.DataAccess.Repositories.MockRepositories
 
         public EntityEntry<T> Remove(params object[] ids)
         {
-            if (failure)
+            if (removeFailure)
             {
+                if (throwsException)
+                {
+                    throw this.e;
+                }
+
                 return null;
             }
 
@@ -93,8 +107,13 @@ namespace ProjectsNetwork.DataAccess.Repositories.MockRepositories
 
         public int Save()
         {
-            if (failure)
+            if (saveFailure)
             {
+                if (throwsException)
+                {
+                    throw this.e;
+                }
+
                 return 0;
             }
             return 1;
@@ -102,17 +121,36 @@ namespace ProjectsNetwork.DataAccess.Repositories.MockRepositories
 
         public Task<int> SaveAsync()
         {
-            if (failure)
+            if (saveFailure)
             {
+                if (throwsException)
+                {
+                    throw this.e;
+                }
+
                 return new Task<int>(() => 0);
             }
             return new Task<int>(() => 1);
         }
 
-        public void setFailure(bool val)
+        public void setSaveFailure(bool val)
         {
-            this.failure = val;
+            this.saveFailure = val;
         }
 
+        public void setRemoveFailure(bool val)
+        {
+            this.removeFailure = val;
+        }
+
+        public void setInsertFailure(bool val)
+        {
+            this.insertFailure = val;
+        }
+
+        public void setThrowsException(bool val)
+        {
+            this.throwsException = val;
+        }
     }
 }
