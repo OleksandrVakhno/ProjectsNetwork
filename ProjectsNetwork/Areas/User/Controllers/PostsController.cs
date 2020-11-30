@@ -153,5 +153,24 @@ namespace ProjectsNetwork.Controllers
             return RedirectToAction("Learn", new { id = projectId });
         }
 
+        public IActionResult CancelInterest(int projectId)
+        {
+            ClaimsPrincipal currentUser = this.User;
+            var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (currentUserID == null)
+            {
+                return NotFound("User not found");
+            }
+            if (!this._projectsService.CancelInterest(currentUserID, projectId))
+            {
+                return BadRequest();
+            }
+
+            return RedirectToAction("Learn", new { id = projectId });
+            
+
+
+        }
+
     }
 }
