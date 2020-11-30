@@ -17,6 +17,7 @@
         function interested(id) {
             window.location.href = '@Url.Action("Interested", "Matches")' + "?projectId=" + id.toString();
         }
+    
 </script>
 <div class="container ">
     @if ((String)ViewContext.RouteData.Values["action"] == "Index")
@@ -55,6 +56,7 @@
                 @if (project.UserId == userManager.GetUserId(User))
                 {
                     <button type="button" class="btn btn-light" onclick="interested(@project.Id)">Interested Users</button>
+                    
                 }
 
             </div>

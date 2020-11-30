@@ -77,6 +77,18 @@ namespace ProjectsNetwork.Controllers
             return View(tupleModel);
         }
 
+        public IActionResult Update(int projectId, int[] skills)
+        {
+            var updatedProject = this._projectsService.UpdateProject(projectId, skills);
+
+            if (!updatedProject)
+            {
+                throw new Exception("Could not update the project");
+            }
+
+            return RedirectToAction("Learn", new { id = projectId });
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Post([Bind(Prefix = "Item2")] Project project, int[] skills)
@@ -131,8 +143,9 @@ namespace ProjectsNetwork.Controllers
             {
                 accepted = interest.Confirmed;
             }
-            var learnModel = new Learn(project, skills,accepted, interested);
-            return View(learnModel);
+            
+            var tupleModel = new Tuple<List<Skill>, Project, Learn>((List<Skill>)this._skillsService.GetAll(), project, new Learn(project, skills, accepted, interested));
+            return View(tupleModel);
         }
 
         public IActionResult SubmitInterest(int projectId)

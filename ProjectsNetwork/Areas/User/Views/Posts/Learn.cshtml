@@ -8,13 +8,14 @@ model Tuple<Project, bool>
 -->
 ﻿@using Microsoft.AspNetCore.Identity
 @inject UserManager<ApplicationUser> userManager
-@model Learn
+@model Tuple<List<Skill>, Project, Learn>
+
 @{
 
     Layout = "_Layout";
-    ViewData["Title"] = Model.Project.Name;
+    ViewData["Title"] = Model.Item3.Project.Name;
 }
-    <script>
+<script>
         function post(projectId) {
             window.location.href = '@Url.Action("SubmitInterest", "Posts")' + "?projectId=" + projectId.toString();
     }
@@ -28,28 +29,32 @@ model Tuple<Project, bool>
             window.location.href = '@Url.Action("UserInfo","Communication")' + "?id=" + id;
 
     }
-    
-    </script>
+
+    function update(projectId) {
+        window.location.href = '@Url.Action("Update","Posts")';
+    }
+
+</script>
 <div class="container">
-    @if (Model.Project.UserId != userManager.GetUserId(User))
+    @if (Model.Item3.Project.UserId != userManager.GetUserId(User))
     {
         <div class="row" style="margin-top: 2%; margin-bottom: 2%">
             <div class="col-2 offset-md-10">
-                @if (Model.Accepted)
+                @if (Model.Item3.Accepted)
                 {
                     <i class="icon-ok-sign" style="color:green">User accepted your interest</i>
-                    <button type="button" class="btn btn-light" onclick="contact('@Model.Project.Id')">Contact</button>
+                    <button type="button" class="btn btn-light" onclick="contact('@Model.Item3.Project.Id')">Contact</button>
                 }
                 
 
-                else if (Model.Request && !Model.Accepted)
+                else if (Model.Item3.Request && !Model.Item3.Accepted)
                 {
-                    <button type="button" class="btn btn-dark" onclick="cancel(@Model.Project.Id)">CANCEL INTEREST</button>
+                    <button type="button" class="btn btn-dark" onclick="cancel(@Model.Item3.Project.Id)">CANCEL INTEREST</button>
                     <i class="icon-ok-sign" style="color:green">Interest Submitted</i>
                 }
                 else
                 {
-                    <button type="button" class="btn btn-dark" onclick="post(@Model.Project.Id)">REQUEST TO JOIN</button>
+                    <button type="button" class="btn btn-dark" onclick="post(@Model.Item3.Project.Id)">REQUEST TO JOIN</button>
                 }
 
 
@@ -59,33 +64,57 @@ model Tuple<Project, bool>
     }
 
 
-        <h1 class="text-center" style="text-transform:uppercase; font-family: Impact, Charcoal, sans-serif">@Model.Project.Name</h1>
+        <h1 class="text-center" style="text-transform:uppercase; font-family: Impact, Charcoal, sans-serif">@Model.Item3.Project.Name</h1>
         <div class="container p-3 mb-2 bg-dark text-white" style="border-radius:1rem !important">
             <h4>DESCRIPTION:</h4>
             <div class="row">
                 <div class="col">
-                    <p>@Model.Project.Description</p>
+                    <p>@Model.Item3.Project.Description</p>
                 </div>
             </div>
             <h4>PREFERED SKILLS:</h4>
             <div class="row">
                 <div class="col">
-                    @if (Model.Skills != null)
+                    @if (Model.Item3.Skills != null)
                     {
                         <div class="row" style="width:50%">
-                            @foreach (var skill in Model.Skills)
+                            @foreach (var skill in Model.Item3.Skills)
                             {
                                 <div class="col-md-6"><h5><span class="badge badge-light">@skill.SkillName</span></h5></div>
                             }
                         </div>
-                        
+
                     }
                     else
                     {
                         <h3>No preffered skills for this project</h3>
                     }
+
+                    @if (Model.Item2.UserId == userManager.GetUserId(User))
+                    {
+                        
+                <form id="projectPost" method="post" action="/User/Posts/Update">
+                    <div class="container">
+                        <div class="form-group text-dark">
+
+                            <select class="js-example-responsive" name="skills" multiple="multiple" style="width:100%;">
+                                @if (Model.Item1 != null)
+                                {
+                                    foreach (var skill in Model.Item1)
+                                    {
+                                        <option value="@skill.Id">@skill.SkillName</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+
+
+                        <button type="submit" class="btn btn-light">Update Skills</button>
+                    </div>
+                </form>
+                    }
                 </div>
-            </div>
         
     </div>
 
