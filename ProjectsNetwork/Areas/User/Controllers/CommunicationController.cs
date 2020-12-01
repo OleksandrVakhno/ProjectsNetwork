@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjectsNetwork.Models;
 using ProjectsNetwork.Models.ViewModels;
@@ -12,6 +13,7 @@ using ProjectsNetwork.Utils;
 namespace ProjectsNetwork.Areas.User.Controllers
 {
     [Area("User")]
+    [Authorize]
     public class CommunicationController : Controller
     {
         private readonly IProjectsService _projectsService;
