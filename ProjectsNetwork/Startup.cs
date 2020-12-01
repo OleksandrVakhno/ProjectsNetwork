@@ -52,8 +52,9 @@ namespace ProjectsNetwork
             services.AddScoped<IProjectsService, ProjectsService>();
             services.AddScoped<IApplicationUserService, ApplicationUserService>();
 
+            services.Configure<AuthMessageSenderOptions>(options => Configuration.GetSection("SendGrid").Bind(options));
             services.AddTransient<IEmailSender, EmailSender>();
-            services.Configure<AuthMessageSenderOptions>(Configuration);
+            
 
             services.AddControllersWithViews();
             services.AddRazorPages();
