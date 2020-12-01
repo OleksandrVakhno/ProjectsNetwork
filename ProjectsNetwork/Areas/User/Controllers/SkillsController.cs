@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjectsNetwork.Models;
 using ProjectsNetwork.Services.IServices;
@@ -15,6 +16,7 @@ namespace ProjectsNetwork.Controllers
     [Route("User/Skills",
         Name = "skill")]
     [Area("User")]
+    [Authorize]
     public class SkillsController : Controller
     {
 
