@@ -6,8 +6,11 @@
 
   <ItemGroup>
     <PackageReference Include="SendGrid" Version="9.21.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.10" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\.editorconfig" />
+  </ItemGroup>
 </Project>
