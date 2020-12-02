@@ -33,8 +33,4 @@
     <ProjectReference Include="..\ProjectsNetwork\ProjectsNetwork.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="IntegrationTests\" />
-  </ItemGroup>
-
 </Project>
