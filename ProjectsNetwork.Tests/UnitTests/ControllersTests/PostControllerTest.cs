@@ -21,9 +21,8 @@ namespace ProjectsNetwork.Tests.ControllersTests
         private readonly Mock<ISkillsService> mockSkillService;
         private readonly Mock<IProjectsService> mockProjectService;
         private List<Skill> skills;
-        private List<UserSkill> userSkills;
-        private Project project;
-        private readonly ProjectRepository _projectRepository;
+        private List<Project> projects;
+        
 
         public PostsControllerTest()
         {
@@ -61,12 +60,7 @@ namespace ProjectsNetwork.Tests.ControllersTests
             var skill2 = new Skill { Id = 2, SkillName = "C#" };
             this.skills = new List<Skill>() { skill1, skill2 };
 
-
-            var userSkill1 = new UserSkill { UserId = "1", Skill = skill1 };
-            var userSkill2 = new UserSkill { UserId = "1", Skill = skill2 };
-            this.userSkills = new List<UserSkill>() { userSkill1, userSkill2 };
-
-            var project = new Project
+            var project1 = new Project
             {
                 Id = 0,
                 UserId = "1",
@@ -75,7 +69,17 @@ namespace ProjectsNetwork.Tests.ControllersTests
                 CreationDate = DateTime.Now,
             };
 
-            _projectRepository.Insert(project);
+            var project2 = new Project
+            {
+                Id = 1,
+                UserId = "2",
+                Name = "project2",
+                Description = "new project 2",
+                CreationDate = DateTime.Now,
+            };
+
+            this.projects = new List<Project>() { project1, project2 };
+
 
         }
 
@@ -84,14 +88,17 @@ namespace ProjectsNetwork.Tests.ControllersTests
         {
 
             mockSkillService.Setup(service => service.GetAll()).Returns(this.skills);
-            _projectRepository.Insert(project);
-            var projects = this._projectRepository.GetAll();
-            mockProjectService.Setup(service => service.GetFiltered(It.IsAny<string>(), null)).Returns(projects);
+            mockProjectService.Setup(service => service.GetFiltered(It.IsAny<string>(), null)).Returns(this.projects);
+
             var controller = new PostsController(mockProjectService.Object, mockSkillService.Object);
             controller.ControllerContext = this.controllerContext;
             var result = controller.Index("Java");
             var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.IsAssignableFrom<Project>(viewResult.ViewData.Model);
+            Assert.IsAssignableFrom<Project[]>(viewResult.ViewData.Model);
+
+            result = controller.Index("");
+            viewResult = Assert.IsType<ViewResult>(result);
+            Assert.IsAssignableFrom<Project[]>(viewResult.ViewData.Model);
 
 
             mockSkillService.Reset();
@@ -101,14 +108,13 @@ namespace ProjectsNetwork.Tests.ControllersTests
         [Fact]
         public void MyProjectsTest()
         {
-            mockSkillService.Setup(service => service.GetAll()).Returns(this.skills);
-            var projects = this._projectRepository.GetAll();
             mockProjectService.Setup(service => service.GetUserProjects(It.IsAny<string>())).Returns(projects);
             var controller = new PostsController(mockProjectService.Object, mockSkillService.Object);
             controller.ControllerContext = this.controllerContext;
             var result = controller.MyProjects();
             var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.IsAssignableFrom<Project>(viewResult.ViewData.Model);
+            Assert.IsAssignableFrom<List<Project>>(viewResult.ViewData.Model);
+            mockProjectService.Reset();
         }
 
         [Fact]
@@ -119,7 +125,7 @@ namespace ProjectsNetwork.Tests.ControllersTests
             var result = controller.AddNewSkill(new Skill());
             var viewResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Null(viewResult.ControllerName);
-            Assert.Equal("Index", viewResult.ActionName);
+            Assert.Equal("Post", viewResult.ActionName);
 
             mockSkillService.Reset();
             mockProjectService.Reset();
@@ -136,9 +142,12 @@ namespace ProjectsNetwork.Tests.ControllersTests
         [Fact]
         public void LearnTest()
         {
+            var project = new Project { UsersInterested = new List<InterestedInProject>() };
             mockSkillService.Setup(service => service.GetProjectSkills(It.IsAny<int>())).Returns(this.skills);
-            mockProjectService.Setup(service => service.GetProject(It.IsAny<int>())).Returns(this.project);
+            mockProjectService.Setup(service => service.GetProject(It.IsAny<int>())).Returns(project);
+            mockSkillService.Setup(service => service.GetAll()).Returns(this.skills);
             var controller = new PostsController(mockProjectService.Object, mockSkillService.Object);
+            controller.ControllerContext = this.controllerContext;
             var result = controller.Learn(0);
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.IsAssignableFrom<Learn>(viewResult.ViewData.Model);
@@ -152,9 +161,19 @@ namespace ProjectsNetwork.Tests.ControllersTests
         {
             mockProjectService.Setup(service => service.SubmitInterest(It.IsAny<string>(), It.IsAny<int>())).Returns(true);
             var controller = new PostsController(mockProjectService.Object, mockSkillService.Object);
+            controller.ControllerContext = this.controllerContext;
             var result = controller.SubmitInterest(0);
             var viewResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Learn", viewResult.ActionName);
+
+            
+
+
+            mockProjectService.Setup(service => service.SubmitInterest(It.IsAny<string>(), It.IsAny<int>())).Returns(false);
+            controller = new PostsController(mockProjectService.Object, mockSkillService.Object);
+            controller.ControllerContext = this.controllerContext;
+            result = controller.SubmitInterest(0);
+            Assert.IsType<BadRequestResult>(result);
 
             mockSkillService.Reset();
             mockProjectService.Reset();
@@ -165,10 +184,19 @@ namespace ProjectsNetwork.Tests.ControllersTests
         {
             mockProjectService.Setup(service => service.CancelInterest(It.IsAny<string>(), It.IsAny<int>())).Returns(true);
             var controller = new PostsController(mockProjectService.Object, mockSkillService.Object);
-            controller.SubmitInterest(0);
+            controller.ControllerContext = this.controllerContext;
             var result = controller.CancelInterest(0);
             var viewResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Learn", viewResult.ActionName);
+            mockProjectService.Reset();
+
+
+            mockProjectService.Setup(service => service.CancelInterest(It.IsAny<string>(), It.IsAny<int>())).Returns(false);
+            controller = new PostsController(mockProjectService.Object, mockSkillService.Object);
+            controller.ControllerContext = this.controllerContext;
+            result = controller.CancelInterest(0);
+            Assert.IsType<BadRequestResult>(result);
+            mockProjectService.Reset();
         }
 
 

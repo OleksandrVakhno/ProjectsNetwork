@@ -15,8 +15,9 @@ namespace ProjectsNetwork.Tests.ServicesTests
         private readonly MockProjectRepository _projectsRepository;
         private readonly MockApplicationUserRepository _applicationUserRepository;
         private readonly MockInterestedInProjectRepository _interestedInProjectRepository;
-        private readonly MockUserSkillRepository _userSkillRepository;
         private readonly MockSkillRepository _skillRepository;
+        private readonly MockUserSkillRepository _userSkillRepository;
+  
 
 
 
@@ -38,78 +39,52 @@ namespace ProjectsNetwork.Tests.ServicesTests
 
         private void Seed()
         {
-            var userSkill1 = new UserSkill { UserId = "1", SkillId = 1, Skill = new Skill { Id = 4, SkillName = "C++"} };
-            var userSkill2 = new UserSkill { UserId = "2", SkillId = 2, Skill= new Skill { Id = 3, SkillName = "Python" } };
-            this._userSkillRepository.Insert(userSkill1);
-            this._userSkillRepository.Insert(userSkill2);
 
-            var skill1 = new Skill { Id = 1, SkillName = "Java", Users = new List<UserSkill> { userSkill1 } };
-            var skill2 = new Skill { Id = 2, SkillName = "C++", Users = new List<UserSkill> { userSkill2 } };
-            this._skillRepository.Insert(skill1);
-            this._skillRepository.Insert(skill2);
+            this._projectsRepository.Insert(new Project { UserId = "1" });
+            this._interestedInProjectRepository.Insert(new InterestedInProject { UserId = "1", ProjectId = 5, Confirmed = true });
 
 
-            var projects1 = new Project { Id = 1, Name = "Project1", Description = "New Project1", CreationDate = DateTime.Now, UserId ="1",
-                User = new ApplicationUser()
-                {
-                    Skills = new List<UserSkill> { new UserSkill()
-                    {
-                        UserId = "1",
-                        SkillId = 3
-                    }
-                    }
-
-                },
-                PrefferedSkills = new List<ProjectSkill> { new ProjectSkill { ProjectId = 3, Skill = skill1} }
-                };
-            var projects2 = new Project { Id = 2, Name = "Project2", Description = "New Project2", CreationDate = DateTime.Now, UserId = "1" };
+            var projects1 = new Project { Id = 1, Name = "Project1", Description = "New Project1", CreationDate = DateTime.Now};
+            var projects2 = new Project { Id = 2, Name = "Project2", Description = "New Project2", CreationDate = DateTime.Now};
+            var project3 = new Project { Id = 3, Name = "Project3", UserId = "1" };
+            var project4 = new Project { Id = 4 };
+            var project6 = new Project { Id = 6 };
+            var project7 = new Project { Id = 7 };
             this._projectsRepository.Insert(projects1);
             this._projectsRepository.Insert(projects2);
+            this._projectsRepository.Insert(project3);
+            this._projectsRepository.Insert(project4);
+            this._projectsRepository.Insert(project6);
+            this._projectsRepository.Insert(project7);
 
-            
+            var user1 = new ApplicationUser { Id = "1" };
+            this._applicationUserRepository.Insert(user1);
 
-            
-
-            
-            
-
-            
 
             var interested1 = new InterestedInProject
             {
                 UserId = "1",
-                ProjectId = 4,
-                User = new ApplicationUser
-                {
-                    Skills = new List<UserSkill> { userSkill1}
+                ProjectId = 1,
 
-                },
-                Project = projects1,
-                Confirmed = true,
-                
             };
 
             var interested2 = new InterestedInProject
             {
                 UserId = "1",
-                ProjectId = 5,
-                User = new ApplicationUser
-                {
-                    Skills = new List<UserSkill> { userSkill2},
-                    Projects = new List<Project> { new Project { Id = 3, Name = "proj", UserId ="1"} },
-                    InterestedInProjects = new List<InterestedInProject> { new InterestedInProject { UserId="2", Confirmed = false} }
-
-                },
-                Project = projects2,
-                Confirmed = false,
+                ProjectId = 2,
+             
+            };
+            var interested3 = new InterestedInProject
+            {
+                UserId = "5",
+                ProjectId = 4
             };
             this._interestedInProjectRepository.Insert(interested1);
             this._interestedInProjectRepository.Insert(interested2);
+            this._interestedInProjectRepository.Insert(interested3);
 
-            var applicationuser1 = new ApplicationUser { Skills = new List<UserSkill> { userSkill1 }, Projects = new List<Project> { projects1 }, InterestedInProjects = new List<InterestedInProject> { interested1 } };
-            var applicationuser2 = new ApplicationUser { Skills = new List<UserSkill> { userSkill2 }, Projects = new List<Project> { projects2 }, InterestedInProjects = new List<InterestedInProject> { interested2 } };
+            var applicationuser1 = new ApplicationUser { InterestedInProjects = new List<InterestedInProject> { interested1, interested2 } };
             this._applicationUserRepository.Insert(applicationuser1);
-            this._applicationUserRepository.Insert(applicationuser2);
 
 
         }
@@ -128,7 +103,14 @@ namespace ProjectsNetwork.Tests.ServicesTests
             
             var projects = this._projectsService.GetInterested(2);
             Assert.NotNull(projects);
-            
+            Assert.NotEmpty(projects);
+
+            projects = this._projectsService.GetInterested(3);
+            Assert.NotNull(projects);
+            Assert.Empty(projects);
+
+            Assert.Throws<Exception>(() => this._projectsService.GetInterested(4));
+
         }
 
         [Fact]
@@ -148,8 +130,7 @@ namespace ProjectsNetwork.Tests.ServicesTests
             var project = this._projectsService.GetAcceptedProjects("1");
             Assert.NotNull(project);
 
-            
-
+           
         }
 
         [Fact]
@@ -162,23 +143,17 @@ namespace ProjectsNetwork.Tests.ServicesTests
             Assert.Empty(result);
 
 
-
-            
-            
-
-
         }
 
         [Fact]
         public void GetUserProjectsTest()
         {
+            
             var project = this._projectsService.GetUserProjects("1");
             Assert.NotEmpty(project);
 
             project = this._projectsService.GetUserProjects("7");
             Assert.Empty(project);
-
-
 
         }
 
@@ -217,35 +192,36 @@ namespace ProjectsNetwork.Tests.ServicesTests
         }
 
         [Fact]
-        public void SubmitInterestProject()
+        public void SubmitInterestProjectTest()
         {
 
-            var result = this._projectsService.SubmitInterest("2", 1);
+            var result = this._projectsService.SubmitInterest("1", 4);
             Assert.True(result);
-            
+
+            //already interested
+            result = this._projectsService.SubmitInterest("1", 4);
+            Assert.False(result);
+
+            //user cannot submit interest to his project
+            result = this._projectsService.SubmitInterest("1", 3);
+            Assert.False(result);
 
             _interestedInProjectRepository.setInsertFailure(true);
-            result = _projectsService.SubmitInterest("2", 1);
+            result = _projectsService.SubmitInterest("1", 6);
             Assert.False(result);
             _interestedInProjectRepository.setThrowsException(true);
-            Assert.Throws<Exception>(() => _projectsService.SubmitInterest("2", 1));
+            Assert.Throws<Exception>(() => _projectsService.SubmitInterest("1", 6));
             _interestedInProjectRepository.setInsertFailure(false);
             _interestedInProjectRepository.setThrowsException(false);
             
 
             _interestedInProjectRepository.setSaveFailure(true);
-            result = _projectsService.SubmitInterest("2", 1);
+            result = _projectsService.SubmitInterest("1", 6);
             Assert.False(result);
             _interestedInProjectRepository.setThrowsException(true);
-            Assert.Throws<Exception>(() => _projectsService.SubmitInterest("2", 1));
+            Assert.Throws<Exception>(() => _projectsService.SubmitInterest("1", 7));
             _interestedInProjectRepository.setSaveFailure(false);
             _interestedInProjectRepository.setThrowsException(false);
-
-
-
-
-
-
 
         }
         
@@ -253,15 +229,12 @@ namespace ProjectsNetwork.Tests.ServicesTests
         [Fact]
         public void CancelInterest()
         {
-            var result = this._projectsService.CancelInterest("1", 4);
-            Assert.True(result);
             
-
             _interestedInProjectRepository.setRemoveFailure(true);
-            result = _projectsService.CancelInterest("1", 4);
+            var result = _projectsService.CancelInterest("1", 1);
             Assert.False(result);
             _interestedInProjectRepository.setThrowsException(true);
-            Assert.Throws<Exception>(() => _projectsService.SubmitInterest("1", 4));
+            Assert.Throws<Exception>(() => _projectsService.CancelInterest("1", 1));
             _interestedInProjectRepository.setRemoveFailure(false);
             _interestedInProjectRepository.setThrowsException(false);
 
@@ -269,12 +242,13 @@ namespace ProjectsNetwork.Tests.ServicesTests
             result = _projectsService.CancelInterest("1", 4);
             Assert.False(result);
             _interestedInProjectRepository.setThrowsException(true);
-            Assert.Throws<Exception>(() => _projectsService.SubmitInterest("1", 4));
+            Assert.Throws<Exception>(() => _projectsService.CancelInterest("1", 1));
             _interestedInProjectRepository.setSaveFailure(false);
             _interestedInProjectRepository.setThrowsException(false);
 
 
-
+            result = this._projectsService.CancelInterest("1", 2);
+            Assert.True(result);
 
         }
 
@@ -286,16 +260,10 @@ namespace ProjectsNetwork.Tests.ServicesTests
             _interestedInProjectRepository.setSaveFailure(true);
             result = _projectsService.AcceptInterest("1", 1);
             Assert.False(result);
-            _interestedInProjectRepository.setThrowsException(true);
+            _interestedInProjectRepository.setUpdateFailure(true);
             Assert.Throws<Exception>(() => _projectsService.AcceptInterest("1", 1));
             _interestedInProjectRepository.setSaveFailure(false);
-            _interestedInProjectRepository.setThrowsException(false);
-
-
-
-
-
-
+            _interestedInProjectRepository.setUpdateFailure(false);
 
 
         }

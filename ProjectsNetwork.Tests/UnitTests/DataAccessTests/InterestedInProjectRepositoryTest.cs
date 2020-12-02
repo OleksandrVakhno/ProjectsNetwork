@@ -58,6 +58,9 @@ namespace ProjectsNetwork.Tests
             _context.Database.EnsureDeleted();
             _context.Database.EnsureCreated();
 
+
+            //automatically saves with a different Id since those are autogenerate by the db
+            //need to create different users for testing once out of context
             var user = new ApplicationUser { Id = "1" };
             _context.Add(user);
             _context.SaveChanges();
@@ -136,17 +139,25 @@ namespace ProjectsNetwork.Tests
         [Fact]
         public void RemoveTest()
         {
-            var interested = this._interestedInProjectRepository.Remove("1", 7);
-            Assert.NotNull(interested);
+            var interested = _interestedInProjectRepository.GetAll().ToList()[0];
+            var result = this._interestedInProjectRepository.Remove(interested);
+            Assert.NotNull(result);
+
+            Assert.Throws<ArgumentNullException>(() => this._interestedInProjectRepository.Remove("2", 2 ));
 
         }
 
         [Fact]
         public void save()
         {
-            var interested = this._interestedInProjectRepository.Insert(new InterestedInProject { UserId = "1", ProjectId = 6, Confirmed = false });
+            _context.Add(new ApplicationUser { Id = "3" });
+            _context.SaveChanges();
+            var interested = this._interestedInProjectRepository.Insert(new InterestedInProject { UserId = "3", ProjectId = 1, Confirmed = false });
             var command = this._interestedInProjectRepository.Save();
             Assert.NotEqual(0, command);
+
+            command = this._interestedInProjectRepository.Save();
+            Assert.Equal(0, command);
 
         }
 

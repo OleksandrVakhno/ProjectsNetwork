@@ -6,6 +6,7 @@ using ProjectsNetwork.Controllers;
 using ProjectsNetwork.Data;
 using ProjectsNetwork.DataAccess.Repositories;
 using ProjectsNetwork.Models;
+using ProjectsNetwork.Models.ViewModels;
 using ProjectsNetwork.Services.IServices;
 using System;
 using System.Collections.Generic;
@@ -18,9 +19,9 @@ namespace ProjectsNetwork.Tests.ControllersTests
     {
         private readonly ControllerContext controllerContext;
         private readonly Mock<IProjectsService> mockProjectService;
-        private Project project;
-        private readonly InterestedInProjectRepository _interestedInProject;
-        private readonly ApplicationDbContext _db;
+        private List<ApplicationUser> users;
+        private List<Project> projects;
+        private List<InterestedInProject> interests;
 
         public MatchesControllerTest()
         {
@@ -52,6 +53,9 @@ namespace ProjectsNetwork.Tests.ControllersTests
         [Fact]
         public void Seed()
         {
+            var user = new ApplicationUser() { UserName = "AppUser", Id = "1" };
+            this.users = new List<ApplicationUser>() { user };
+
             var project = new Project
             {
                 Id = 0,
@@ -60,28 +64,32 @@ namespace ProjectsNetwork.Tests.ControllersTests
                 Description = "new project 1",
                 CreationDate = DateTime.Now,
             };
+            this.projects = new List<Project>() { project };
 
-            _interestedInProject.Insert(new InterestedInProject()
+            var interested = new InterestedInProject()
             {
                 UserId = "1",
                 ProjectId = 1,
-                User = new ApplicationUser() { UserName = "AppUser", Id = "1" },
-                Project = this.project,
+                User = user,
+                Project = project,
                 Confirmed = true
-            });
+            };
+            this.interests = new List<InterestedInProject>() { interested };
+
+
+
 
         }
 
         [Fact]
         public void AcceptedTest()
         {
-            var interesteduser = this._interestedInProject.GetAll();
-            mockProjectService.Setup(service => service.GetAcceptedProjects(It.IsAny<string>())).Returns(interesteduser);
+            mockProjectService.Setup(service => service.GetAcceptedProjects(It.IsAny<string>())).Returns(this.interests);
             var controller = new MatchesController(mockProjectService.Object);
             controller.ControllerContext = this.controllerContext;
             var result = controller.Accepted();
             var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.IsAssignableFrom<Project>(viewResult.ViewData.Model);
+            Assert.IsAssignableFrom<List<InterestedInProject>>(viewResult.ViewData.Model);
 
             mockProjectService.Reset();
 
@@ -90,13 +98,12 @@ namespace ProjectsNetwork.Tests.ControllersTests
         [Fact]
         public void MatchesTest()
         {
-            var interesteduser = _interestedInProject.GetAll();
-            mockProjectService.Setup(service => service.GetMatches(It.IsAny<string>())).Returns(interesteduser);
+            mockProjectService.Setup(service => service.GetMatches(It.IsAny<string>())).Returns(this.interests);
             var controller = new MatchesController(mockProjectService.Object);
             controller.ControllerContext = this.controllerContext;
             var result = controller.Matches();
             var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.IsAssignableFrom<Project>(viewResult.ViewData.Model);
+            Assert.IsAssignableFrom<List<InterestedInProject>>(viewResult.ViewData.Model);
 
             mockProjectService.Reset();
         }
@@ -104,14 +111,12 @@ namespace ProjectsNetwork.Tests.ControllersTests
         [Fact]
         public void InterestedTest()
         {
-            var AppUserRepo = new ApplicationUserRepository(_db);
-            var appUser = AppUserRepo.GetAll();
-            mockProjectService.Setup(service => service.GetInterested(It.IsAny<int>())).Returns(appUser);
+            mockProjectService.Setup(service => service.GetInterested(It.IsAny<int>())).Returns(this.users);
             var controller = new MatchesController(mockProjectService.Object);
             controller.ControllerContext = this.controllerContext;
             var result = controller.Interested(0);
             var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.IsAssignableFrom<Project>(viewResult.ViewData.Model);
+            Assert.IsAssignableFrom<InterestedViewModel>(viewResult.ViewData.Model);
 
             mockProjectService.Reset();
         }
@@ -129,11 +134,11 @@ namespace ProjectsNetwork.Tests.ControllersTests
 
             mockProjectService.Reset();
 
-            mockProjectService.Setup(service => service.AcceptInterest(It.IsAny<string>(), It.IsAny<int>())).Returns(true);
+            mockProjectService.Setup(service => service.AcceptInterest(It.IsAny<string>(), It.IsAny<int>())).Returns(false);
             controller = new MatchesController(mockProjectService.Object);
             controller.ControllerContext = this.controllerContext;
             result = controller.AcceptInterest(0, "1");
-            Assert.Equal("Failed to accept interest", result.ToString());
+            Assert.IsType<BadRequestObjectResult>(result);
 
             mockProjectService.Reset();
         }

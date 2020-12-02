@@ -28,19 +28,10 @@ namespace ProjectsNetwork.DataAccess.Repositories.MockRepositories
 
         public void Update(InterestedInProject item)
         {
-            var key = (item.UserId, item.ProjectId).ToString();
-            this.db[key].Confirmed = item.Confirmed;
-            
-
-
-
-
-            
-            
-            
-                
-
-            
+            if (updateFailure) {
+                throw new Exception("Failed to update");
+            }
+           
             
         }
     }

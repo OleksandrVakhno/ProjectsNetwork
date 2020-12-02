@@ -25,10 +25,15 @@ namespace ProjectsNetwork.Tests.ControllersTests
         private readonly Mock<ISkillsService> mockSkillsService;
         private readonly Mock<IApplicationUserService> mockApplicationUserService;
 
+        private List<Project> projects;
+        private List<UserSkill> skills;
+
 
         public CommunicationControllerTest()
         {
             this.mockProjectService = new Mock<IProjectsService>();
+            this.mockApplicationUserService = new Mock<IApplicationUserService>();
+            this.mockSkillsService = new Mock<ISkillsService>();
 
             var user = new ApplicationUser() { UserName = "AppUser", Id = "1" };
 
@@ -56,7 +61,7 @@ namespace ProjectsNetwork.Tests.ControllersTests
         [Fact]
         public void Seed()
         {
-            var project = new Project
+            var project1 = new Project
             {
                 Id = 0,
                 UserId = "1",
@@ -64,6 +69,23 @@ namespace ProjectsNetwork.Tests.ControllersTests
                 Description = "new project 1",
                 CreationDate = DateTime.Now,
             };
+
+            var project2 = new Project
+            {
+                Id = 1,
+                UserId = "2",
+                Name = "project2",
+                Description = "new project 2",
+                CreationDate = DateTime.Now,
+            };
+
+            this.projects = new List<Project>() { project1, project2 };
+
+            var userskill1 = new UserSkill { SkillId = 1, UserId = "1" };
+            var userskill2 = new UserSkill { SkillId = 2, UserId = "2" };
+
+            this.skills = new List<UserSkill>() { userskill1, userskill2 };
+
 
         }
 
@@ -73,9 +95,9 @@ namespace ProjectsNetwork.Tests.ControllersTests
 
             var user = new ApplicationUser() { UserName = "AppUser", Id = "1" };
             mockApplicationUserService.Setup(service => service.GetApplicationUser(It.IsAny<string>())).Returns(user);
-           
-            mockSkillsService.Setup(service => service.GetMySkills(It.IsAny<string>())).Returns(skills);
+            mockSkillsService.Setup(service => service.GetMySkills(It.IsAny<string>())).Returns(this.skills);
             mockProjectService.Setup(service => service.GetUserProjects(It.IsAny<string>())).Returns(projects);
+
             var controller = new CommunicationController(mockProjectService.Object, mockApplicationUserService.Object, mockSkillsService.Object);
             controller.ControllerContext = this.controllerContext;
             var result = controller.UserInfo("1");
@@ -88,14 +110,13 @@ namespace ProjectsNetwork.Tests.ControllersTests
 
             user = null;
             mockApplicationUserService.Setup(service => service.GetApplicationUser(It.IsAny<string>())).Returns(user);
-            skills = _skills.GetAll().ToList();
+            
             mockSkillsService.Setup(service => service.GetMySkills(It.IsAny<string>())).Returns(skills);
-            projects = _projectRepository.GetAll();
             mockProjectService.Setup(service => service.GetUserProjects(It.IsAny<string>())).Returns(projects);
             controller = new CommunicationController(mockProjectService.Object, mockApplicationUserService.Object, mockSkillsService.Object);
             controller.ControllerContext = this.controllerContext;
             result = controller.UserInfo("1");
-            Assert.Equal("User not found", result.ToString());
+            Assert.IsType<NotFoundObjectResult>(result);
 
             mockProjectService.Reset();
             mockApplicationUserService.Reset();

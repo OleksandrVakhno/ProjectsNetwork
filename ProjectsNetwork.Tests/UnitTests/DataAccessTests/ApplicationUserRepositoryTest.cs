@@ -94,9 +94,7 @@ namespace ProjectsNetwork.Tests
             var user = this._applicationUserRepository.Remove("1");
             Assert.NotNull(user);
 
-
-
-
+            Assert.Throws<ArgumentNullException>(() => this._applicationUserRepository.Remove("3"));
 
         }
 
@@ -108,15 +106,21 @@ namespace ProjectsNetwork.Tests
             Assert.NotEqual(0, command);
 
 
+            command = this._applicationUserRepository.Save();
+            Assert.Equal(0, command);
+
+
         }
 
         [Fact]
-        public void SaveAsyncTest()
+        public async void SaveAsyncTest()
         {
             var user = this._applicationUserRepository.Remove("2");
-            var command = this._applicationUserRepository.SaveAsync();
-            Assert.NotNull(command);
+            var command = await this._applicationUserRepository.SaveAsync();
+            Assert.NotEqual(0, command);
 
+            command = await this._applicationUserRepository.SaveAsync();
+            Assert.Equal(0, command);
 
         }
     }

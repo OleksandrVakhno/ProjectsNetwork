@@ -36,6 +36,10 @@ namespace ProjectsNetwork.Areas.User.Controllers
                 return NotFound("Project not found");
             }
             ApplicationUser applicationUserToContact = _applicationUserService.GetApplicationUser(project.UserId);
+            if (applicationUserToContact == null)
+            {
+                return NotFound("User not found");
+            }
             applicationUserToContact.Skills = _skillsService.GetMySkills(project.UserId);
             foreach(UserSkill userSkill in applicationUserToContact.Skills)
             {
@@ -43,10 +47,7 @@ namespace ProjectsNetwork.Areas.User.Controllers
             }
             applicationUserToContact.Projects = (List<Project>)_projectsService.GetUserProjects(project.UserId);
 
-            if(applicationUserToContact == null)
-            {
-                return NotFound("User not found");
-            }
+            
             return View(applicationUserToContact);
         }
 
@@ -55,6 +56,10 @@ namespace ProjectsNetwork.Areas.User.Controllers
         {
   
             ApplicationUser applicationUserToContact = _applicationUserService.GetApplicationUser(userId);
+            if (applicationUserToContact == null)
+            {
+                return NotFound("User not found");
+            }
             applicationUserToContact.Skills = _skillsService.GetMySkills(userId);
             foreach (UserSkill userSkill in applicationUserToContact.Skills)
             {
@@ -62,10 +67,7 @@ namespace ProjectsNetwork.Areas.User.Controllers
             }
             applicationUserToContact.Projects = (List<Project>)_projectsService.GetUserProjects(userId);
 
-            if (applicationUserToContact == null)
-            {
-                return NotFound("User not found");
-            }
+            
             return View("UserInfo",applicationUserToContact);
         }
 
