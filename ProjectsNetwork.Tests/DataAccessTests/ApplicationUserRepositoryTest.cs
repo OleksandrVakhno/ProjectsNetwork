@@ -1,26 +1,28 @@
-using Microsoft.Data.Sqlite;
+﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using ProjectsNetwork.Data;
 using ProjectsNetwork.DataAccess.Repositories;
 using ProjectsNetwork.Models;
 using System;
+using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using Xunit;
 
 namespace ProjectsNetwork.Tests
 {
-    public class ProjectRepositoryTest: IDisposable
+    public class ApplicationUserRepositoryTest : IDisposable
     {
 
         protected DbContextOptions<ApplicationDbContext> ContextOptions { get; }
         private readonly DbConnection _connection;
         private readonly ApplicationDbContext _context;
-        private readonly ProjectRepository _projectRepository;
+        private readonly ApplicationUserRepository _applicationUserRepository;
 
 
-        public ProjectRepositoryTest(){
+        public ApplicationUserRepositoryTest()
+        {
 
             ContextOptions = new DbContextOptionsBuilder<ApplicationDbContext>().UseSqlite(CreateInMemoryDatabase()).Options;
             _connection = RelationalOptionsExtension.Extract(ContextOptions).Connection;
@@ -28,8 +30,8 @@ namespace ProjectsNetwork.Tests
             Seed();
 
 
-            _projectRepository = new ProjectRepository(_context);
-            
+            _applicationUserRepository = new ApplicationUserRepository(_context);
+
         }
 
         private static DbConnection CreateInMemoryDatabase()
@@ -42,12 +44,13 @@ namespace ProjectsNetwork.Tests
             return connection;
         }
 
-        public void Dispose() {
+        public void Dispose()
+        {
 
             _context.Dispose();
             _connection.Dispose();
 
-        } 
+        }
 
 
         private void Seed()
@@ -55,63 +58,41 @@ namespace ProjectsNetwork.Tests
             _context.Database.EnsureDeleted();
             _context.Database.EnsureCreated();
 
-            var user = new ApplicationUser {Id ="1" };
+
+
+            var user = new ApplicationUser { Id = "1" };
             _context.Add(user);
             _context.SaveChanges();
 
-            var project1 = new Project
-            {
-                Id = 0,
-                UserId = "1",
-                Name = "project1",
-                Description = "new project 1",
-                CreationDate = DateTime.Now,
-            };
-
-            var project2 = new Project
-            {
-                Id = 2,
-                UserId = "1",
-                Name = "project2",
-                Description = "new project 2",
-                CreationDate = DateTime.Now,
-            };
-
-            _context.AddRange(project1, project2);
+            var user1 = new ApplicationUser { Id = "2" };
+            _context.Add(user1);
             _context.SaveChanges();
         }
 
         [Fact]
         public void InsertTest()
         {
-            var inserted = this._projectRepository.Insert(new Project());
+            var inserted = this._applicationUserRepository.Insert(new ApplicationUser());
             Assert.NotNull(inserted);
+
+
 
         }
 
         [Fact]
         public void GetAllTest()
         {
-            var projects = _projectRepository.GetAll();
-            Assert.NotNull(projects);
-            Assert.NotEmpty(projects.ToList());
+            var applicationUser = _applicationUserRepository.GetAll();
+            Assert.NotNull(applicationUser);
+            Assert.NotEmpty(applicationUser.ToList());
+
         }
 
         [Fact]
         public void RemoveTest()
         {
-
-
-            var projects = this._projectRepository.Remove(1);
-
-            Assert.NotNull(projects);
-
-            projects = this._projectRepository.Remove(2);
-            Assert.NotNull(projects);
-
-
-
-
+            var user = this._applicationUserRepository.Remove("1");
+            Assert.NotNull(user);
 
 
 
@@ -120,19 +101,20 @@ namespace ProjectsNetwork.Tests
         }
 
         [Fact]
-        public void saveTest()
+        public void SaveTest()
         {
-            var result = this._projectRepository.Insert(new Project() { Id = 0, UserId = "1", CreationDate = DateTime.Now, Description = "new Project 5", Name = "Project" });
-            var command = this._projectRepository.Save();
+            var user = this._applicationUserRepository.Remove("2");
+            var command = this._applicationUserRepository.Save();
             Assert.NotEqual(0, command);
+
 
         }
 
         [Fact]
         public void SaveAsyncTest()
         {
-            var result = this._projectRepository.Insert(new Project() { Id = 0, UserId = "1", CreationDate = DateTime.Now, Description = "new Project 5", Name = "Project" });
-            var command = this._projectRepository.SaveAsync();
+            var user = this._applicationUserRepository.Remove("2");
+            var command = this._applicationUserRepository.SaveAsync();
             Assert.NotNull(command);
 
 

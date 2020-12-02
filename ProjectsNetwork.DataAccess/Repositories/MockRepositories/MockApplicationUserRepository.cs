@@ -10,7 +10,7 @@ namespace ProjectsNetwork.DataAccess.Repositories.MockRepositories
 {
     public class MockApplicationUserRepository :  MockRepository<ApplicationUser>, IApplicationUserRepository
     {
-        EntityEntry<ApplicationUser> IRepository<ApplicationUser>.Insert(ApplicationUser item)
+        public EntityEntry<ApplicationUser> Insert(ApplicationUser item)
         {
             if (this.insertFailure)
             {

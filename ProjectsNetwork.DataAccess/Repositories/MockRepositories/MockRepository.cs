@@ -20,6 +20,7 @@ namespace ProjectsNetwork.DataAccess.Repositories.MockRepositories
         protected bool removeFailure = false;
         protected bool insertFailure = false;
         protected bool throwsException = false;
+        protected bool updateFailure = false;
         protected readonly Exception e = new Exception("Test exception");
 
         public T Get(params object[] ids)
@@ -146,6 +147,11 @@ namespace ProjectsNetwork.DataAccess.Repositories.MockRepositories
         public void setInsertFailure(bool val)
         {
             this.insertFailure = val;
+        }
+
+        public void setUpdateFailure(bool val)
+        {
+            this.updateFailure = val;
         }
 
         public void setThrowsException(bool val)
