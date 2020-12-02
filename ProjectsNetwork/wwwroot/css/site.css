@@ -119,3 +119,21 @@ body {
     font-size: x-large;
 }
 
+.menu-item:hover{
+    color:black;
+}
+
+.footer {
+    background-color: #223344;
+    color: #fff;
+}
+
+.privacy-container{
+    color:#fff;
+}
+
+.project-name {
+    text-shadow: 2px 2px 3px #223344;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    
+}
