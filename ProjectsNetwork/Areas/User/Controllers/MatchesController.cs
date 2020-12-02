@@ -55,6 +55,7 @@ namespace ProjectsNetwork.Areas.User.Controllers
             }
 
             return RedirectToAction(nameof(Accepted));
+
         }
 
     }

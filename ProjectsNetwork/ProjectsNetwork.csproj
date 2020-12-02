@@ -15,6 +15,9 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="3.1.8" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.7" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.9" />
+
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.0" />
+
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.9">
       <PrivateAssets>all</PrivateAssets>
@@ -26,12 +29,20 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.4" />
+
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.0" />
+    <PackageReference Include="Microsoft.NETCore" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" />
+
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ProjectNetwork.Services\ProjectsNetwork.Services.csproj" />
     <ProjectReference Include="..\ProjectsNetwork.DataAccess\ProjectsNetwork.DataAccess.csproj" />
     <ProjectReference Include="..\ProjectsNetwork.Utils\ProjectsNetwork.Utils.csproj" />
+    <ProjectReference Include="..\ProjectsNetwork.Models\ProjectsNetwork.Models.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\User\Views\Skills\" />
