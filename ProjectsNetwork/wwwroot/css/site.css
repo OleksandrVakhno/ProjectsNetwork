@@ -102,9 +102,20 @@ body {
     border: none;
     outline: none;
     color: white;
-    padding: 14px 16px;
+    padding: 1px;
     background-color: inherit;
     font-family: inherit;
-    margin: 0;
+    margin-top: 7px;
+    margin-left: 10px;
+}
+
+.bg-dark {
+    background-color: #223344;
+    box-shadow: 5px 5px 10px 1px #999;
+}
+
+.navbar-brand {
+    font-weight: 900;
+    font-size: x-large;
 }
 
