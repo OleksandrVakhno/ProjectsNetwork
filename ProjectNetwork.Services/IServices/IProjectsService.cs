@@ -16,6 +16,7 @@ namespace ProjectsNetwork.Services.IServices
         IEnumerable<Project> GetFiltered(string filterSkill, Expression<Func<Project, bool>> filterAll = null); //filter the projects based on skill
         Project GetProject(int Id);
         bool PostProject(Project project, int[] skills);
+        bool UpdateProjectSkills(int projectId, int[] skills);
         bool SubmitInterest(string userId, int projectId);
         bool AcceptInterest(string userId, int projectId);
         bool CancelInterest(string userId, int projectId);

@@ -254,6 +254,41 @@ namespace ProjectsNetwork.Services
             return true;
         }
 
+        public bool UpdateProjectSkills(int projectId, int[] skills)
+        {
+            try
+            {
+                Project project = _projectRepository.Get(projectId);
 
+                if (skills != null)
+                {
+                    List<ProjectSkill> prefferedSkills = new List<ProjectSkill>();
+                    foreach (int x in skills)
+                    {
+                        var cur = new ProjectSkill();
+                        cur.ProjectId = project.Id;
+                        cur.SkillId = x;
+                        prefferedSkills.Add(cur);
+                    }
+
+                    project.PrefferedSkills = prefferedSkills;
+
+                }
+
+                this._projectRepository.Update(project);
+
+                var result = this._projectRepository.Save();
+
+                if (result == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Failed to update the project: " + e.Message);
+            }
+        }
     }
 }

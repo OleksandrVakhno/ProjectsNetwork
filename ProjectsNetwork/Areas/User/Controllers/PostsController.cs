@@ -101,6 +101,18 @@ namespace ProjectsNetwork.Controllers
 
         }
 
+        public IActionResult Update(int projectId, int[] skills)
+        {
+            var updatedProject = this._projectsService.UpdateProjectSkills(projectId, skills);
+
+            if (!updatedProject)
+            {
+                throw new Exception("Could not update the project");
+            }
+
+            return RedirectToAction("Learn", new { id = projectId });
+        }
+
         [HttpPost]
         public IActionResult AddNewSkill(Skill skill)
         {
@@ -123,6 +135,7 @@ namespace ProjectsNetwork.Controllers
             ClaimsPrincipal currentUser = this.User;
             var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
             var project = this._projectsService.GetProject(id);
+            var allSkills = this._skillsService.GetAll() as List<Skill>;
             var skills = this._skillsService.GetProjectSkills(id);
             var interest = project.UsersInterested.Find(interseted => interseted.UserId == currentUserID);
             var interested = interest != null;
@@ -131,7 +144,7 @@ namespace ProjectsNetwork.Controllers
             {
                 accepted = interest.Confirmed;
             }
-            var learnModel = new Learn(project, skills,accepted, interested);
+            var learnModel = new Learn(project, skills, allSkills, accepted, interested);
             return View(learnModel);
         }
 

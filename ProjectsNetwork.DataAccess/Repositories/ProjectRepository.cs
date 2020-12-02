@@ -27,7 +27,7 @@ namespace ProjectsNetwork.DataAccess.Repositories
 
             oldProject.Name = project.Name;
             oldProject.Description = project.Description;
-            oldProject.UserId = project.UserId;
+            oldProject.PrefferedSkills = project.PrefferedSkills;
         }
 
     }

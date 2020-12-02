@@ -14,22 +14,23 @@ model Tuple<Project, bool>
     Layout = "_Layout";
     ViewData["Title"] = Model.Project.Name;
 }
-    <script>
+<script>
         function post(projectId) {
             window.location.href = '@Url.Action("SubmitInterest", "Posts")' + "?projectId=" + projectId.toString();
-    }
+        }
+
         function cancel(projectId) {
             window.location.href = '@Url.Action("CancelInterest", "Posts")' + "?projectId=" + projectId.toString();
 
 
-    }
+        }
 
-    function contact(id) {
+        function contact(id) {
             window.location.href = '@Url.Action("UserInfo","Communication")' + "?id=" + id;
 
-    }
-    
-    </script>
+        }
+
+</script>
 <div class="container">
     @if (Model.Project.UserId != userManager.GetUserId(User))
     {
@@ -70,19 +71,45 @@ model Tuple<Project, bool>
             <h4>PREFERED SKILLS:</h4>
             <div class="row">
                 <div class="col">
-                    @if (Model.Skills != null)
+                    @if (Model.ProjectSkills != null)
                     {
                         <div class="row" style="width:50%">
-                            @foreach (var skill in Model.Skills)
+                            @foreach (var skill in Model.ProjectSkills)
                             {
                                 <div class="col-md-6"><h5><span class="badge badge-light">@skill.SkillName</span></h5></div>
                             }
                         </div>
-                        
+
                     }
                     else
                     {
                         <h3>No preffered skills for this project</h3>
+                    }
+
+                    @if (Model.Project.UserId == userManager.GetUserId(User))
+                    {
+
+                        <form id="projectPost" method="post" action="/User/Posts/Update?projectId='@Model.Project.Id'">
+                            <div class="container">
+                                <div class="form-group text-dark">
+                                    <input name="projectId" type="hidden" value="@Model.Project.Id">
+
+                                    <select class="js-example-responsive" name="skills" multiple="multiple" style="width:100%;">
+                                        @if (Model.AllSkills != null)
+                                        {
+                                            foreach (var skill in Model.AllSkills)
+                                            {
+                                                <option value="@skill.Id">@skill.SkillName</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+
+
+
+                                <button type="submit" class="btn btn-light">Update Skills</button>
+                            </div>
+                        </form>
                     }
                 </div>
             </div>
