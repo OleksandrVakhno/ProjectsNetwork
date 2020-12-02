@@ -19,6 +19,7 @@ namespace ProjectsNetwork.Tests.ServicesTests
 
         public SkillServiceTest()
         {
+            
 
             this._skillRepository = new MockSkillRepository();
             this._projectSkillRepository = new MockProjectSkillRepository();

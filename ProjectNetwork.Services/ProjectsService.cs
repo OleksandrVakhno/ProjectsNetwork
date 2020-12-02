@@ -219,7 +219,11 @@ namespace ProjectsNetwork.Services
                 {
                     return false;
                 }
-                this._interestedInProjectRepository.Remove(interestedIn);
+                var removed = this._interestedInProjectRepository.Remove(interestedIn);
+                if (removed == null)
+                {
+                    return false;
+                }
 
                 var result = this._interestedInProjectRepository.Save();
                 if (result == 0)
