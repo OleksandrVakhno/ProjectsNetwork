@@ -8,12 +8,12 @@ model Tuple<Project, bool>
 -->
 ﻿@using Microsoft.AspNetCore.Identity
 @inject UserManager<ApplicationUser> userManager
-@model Tuple<List<Skill>, Project, Learn>
+@model Learn
 
 @{
 
     Layout = "_Layout";
-    ViewData["Title"] = Model.Item3.Project.Name;
+    ViewData["Title"] = Model.Project.Name;
 }
 <script>
         function post(projectId) {
@@ -36,25 +36,25 @@ model Tuple<Project, bool>
 
 </script>
 <div class="container">
-    @if (Model.Item3.Project.UserId != userManager.GetUserId(User))
+    @if (Model.Project.UserId != userManager.GetUserId(User))
     {
         <div class="row" style="margin-top: 2%; margin-bottom: 2%">
             <div class="col-2 offset-md-10">
-                @if (Model.Item3.Accepted)
+                @if (Model.Accepted)
                 {
                     <i class="icon-ok-sign" style="color:green">User accepted your interest</i>
-                    <button type="button" class="btn btn-light" onclick="contact('@Model.Item3.Project.Id')">Contact</button>
+                    <button type="button" class="btn btn-light" onclick="contact('@Model.Project.Id')">Contact</button>
                 }
                 
 
-                else if (Model.Item3.Request && !Model.Item3.Accepted)
+                else if (Model.Request && !Model.Accepted)
                 {
-                    <button type="button" class="btn btn-dark" onclick="cancel(@Model.Item3.Project.Id)">CANCEL INTEREST</button>
+                    <button type="button" class="btn btn-dark" onclick="cancel(@Model.Project.Id)">CANCEL INTEREST</button>
                     <i class="icon-ok-sign" style="color:green">Interest Submitted</i>
                 }
                 else
                 {
-                    <button type="button" class="btn btn-dark" onclick="post(@Model.Item3.Project.Id)">REQUEST TO JOIN</button>
+                    <button type="button" class="btn btn-dark" onclick="post(@Model.Project.Id)">REQUEST TO JOIN</button>
                 }
 
 
@@ -64,21 +64,21 @@ model Tuple<Project, bool>
     }
 
 
-        <h1 class="text-center" style="text-transform:uppercase; font-family: Impact, Charcoal, sans-serif">@Model.Item3.Project.Name</h1>
+        <h1 class="text-center" style="text-transform:uppercase; font-family: Impact, Charcoal, sans-serif">@Model.Project.Name</h1>
         <div class="container p-3 mb-2 bg-dark text-white" style="border-radius:1rem !important">
             <h4>DESCRIPTION:</h4>
             <div class="row">
                 <div class="col">
-                    <p>@Model.Item3.Project.Description</p>
+                    <p>@Model.Project.Description</p>
                 </div>
             </div>
             <h4>PREFERED SKILLS:</h4>
             <div class="row">
                 <div class="col">
-                    @if (Model.Item3.Skills != null)
+                    @if (Model.Skills != null)
                     {
                         <div class="row" style="width:50%">
-                            @foreach (var skill in Model.Item3.Skills)
+                            @foreach (var skill in Model.Skills)
                             {
                                 <div class="col-md-6"><h5><span class="badge badge-light">@skill.SkillName</span></h5></div>
                             }
@@ -90,7 +90,7 @@ model Tuple<Project, bool>
                         <h3>No preffered skills for this project</h3>
                     }
 
-                    @if (Model.Item2.UserId == userManager.GetUserId(User))
+                    @if (Model.Project.UserId == userManager.GetUserId(User))
                     {
                         
                 <form id="projectPost" method="post" action="/User/Posts/Update">
@@ -98,9 +98,9 @@ model Tuple<Project, bool>
                         <div class="form-group text-dark">
 
                             <select class="js-example-responsive" name="skills" multiple="multiple" style="width:100%;">
-                                @if (Model.Item1 != null)
+                                @if (Model.Skills != null)
                                 {
-                                    foreach (var skill in Model.Item1)
+                                    foreach (var skill in Model.Skills)
                                     {
                                         <option value="@skill.Id">@skill.SkillName</option>
                                     }

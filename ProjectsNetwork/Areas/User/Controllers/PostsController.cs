@@ -143,9 +143,9 @@ namespace ProjectsNetwork.Controllers
             {
                 accepted = interest.Confirmed;
             }
-            
-            var tupleModel = new Tuple<List<Skill>, Project, Learn>((List<Skill>)this._skillsService.GetAll(), project, new Learn(project, skills, accepted, interested));
-            return View(tupleModel);
+
+            var learnModel = new Learn(project, skills, accepted, interested);
+            return View(learnModel);
         }
 
         public IActionResult SubmitInterest(int projectId)
