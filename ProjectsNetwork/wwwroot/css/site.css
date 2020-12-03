@@ -79,7 +79,7 @@ body {
 .dropdown-content {
     display: none;
     left: 0;
-    background-color: #343a40;
+    background-color: inherit;
     width: 100%;
     z-index: 1;
 }
@@ -93,7 +93,7 @@ body {
     }
 
 .dropdown-content a:hover {
-    background-color: #eee;
+    background-color: #343a40;
     color: black;
 }
 
@@ -109,19 +109,12 @@ body {
     margin-left: 10px;
 }
 
-.bg-dark {
-    background-color: #223344;
-    box-shadow: 5px 5px 10px 1px #999;
-}
 
 .navbar-brand {
     font-weight: 900;
     font-size: x-large;
 }
 
-.menu-item:hover{
-    color:black;
-}
 
 .footer {
     background-color: #223344;
@@ -136,4 +129,12 @@ body {
     text-shadow: 2px 2px 3px #223344;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     
+}
+
+.update-skill{
+   padding-left: 0px;
+}
+
+.icon-ok-sign{
+    white-space:nowrap;
 }

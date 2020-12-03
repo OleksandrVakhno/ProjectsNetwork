@@ -32,35 +32,10 @@ model Tuple<Project, bool>
 
 </script>
 <div class="container">
-    @if (Model.Project.UserId != userManager.GetUserId(User))
-    {
-        <div class="row" style="margin-top: 2%; margin-bottom: 2%">
-            <div class="col-2 offset-md-10">
-                @if (Model.Accepted)
-                {
-                    <i class="icon-ok-sign" style="color:green">User accepted your interest</i>
-                    <button type="button" class="btn btn-light" onclick="contact('@Model.Project.Id')">Contact</button>
-                }
-                
-
-                else if (Model.Request && !Model.Accepted)
-                {
-                    <button type="button" class="btn btn-dark" onclick="cancel(@Model.Project.Id)">CANCEL INTEREST</button>
-                    <i class="icon-ok-sign" style="color:green">Interest Submitted</i>
-                }
-                else
-                {
-                    <button type="button" class="btn btn-dark" onclick="post(@Model.Project.Id)">REQUEST TO JOIN</button>
-                }
+    
 
 
-
-            </div>
-        </div>
-    }
-
-
-        <h1 class="text-center project-name" >@Model.Project.Name</h1>
+        <h1 class="text-center project-name" style="text-transform: capitalize">@Model.Project.Name</h1>
         <div class="container p-3 mb-2 bg-dark text-white" style="border-radius:1rem !important">
             <h4>DESCRIPTION:</h4>
             <div class="row">
@@ -73,7 +48,7 @@ model Tuple<Project, bool>
                 <div class="col">
                     @if (Model.ProjectSkills != null)
                     {
-                        <div class="row" style="width:50%">
+                        <div class="row" style="width:20px">
                             @foreach (var skill in Model.ProjectSkills)
                             {
                                 <div class="col-md-6"><h5><span class="badge badge-light">@skill.SkillName</span></h5></div>
@@ -86,11 +61,38 @@ model Tuple<Project, bool>
                         <h3>No preffered skills for this project</h3>
                     }
 
+                    @if (Model.Project.UserId != userManager.GetUserId(User))
+                    {
+                        <div class="row" style="margin-top: 2%; margin-bottom: 2%">
+                            <div class="col-2 offset-md-10">
+                                @if (Model.Accepted)
+                                {
+                                    <i class="icon-ok-sign" style="color:white; margin-right:20%; overflow:hidden">User accepted <br>your interest</i><br />
+                                    <button type="button" class="btn btn-light" onclick="contact('@Model.Project.Id')">Contact</button>
+                                }
+
+
+                                else if (Model.Request && !Model.Accepted)
+                                {
+                                    <button type="button" class="btn btn-light" onclick="cancel(@Model.Project.Id)">CANCEL INTEREST</button>
+                                    <i class="icon-ok-sign" style="color:white">Interest Submitted</i>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-light" onclick="post(@Model.Project.Id)">REQUEST TO JOIN</button>
+                                }
+
+
+
+                            </div>
+                        </div>
+                    }
+
                     @if (Model.Project.UserId == userManager.GetUserId(User))
                     {
 
                         <form id="projectPost" method="post" action="/User/Posts/Update?projectId='@Model.Project.Id'">
-                            <div class="container">
+                            <div class="update-skill">
                                 <div class="form-group text-dark">
                                     <input name="projectId" type="hidden" value="@Model.Project.Id">
 
